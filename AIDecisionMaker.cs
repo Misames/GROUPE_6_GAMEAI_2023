@@ -1,6 +1,7 @@
 ﻿using AI_BehaviorTree_AIGameUtility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -17,11 +18,15 @@ namespace AI_BehaviorTree_AIImplementation
         private int AIId = -1;
         public GameWorldUtils AIGameWorldUtils = new GameWorldUtils();
 
+        // Debug mode avec un timer pour mesurer le temps de calcul
+        const int DebugMode = 1;
+        Stopwatch timer = null;
+
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
         public void SetAIId(int parAIId) { AIId = parAIId; }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() { return "MyAIName"; }
+        public string GetName() { return "MichelAI"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils) { AIGameWorldUtils = parGameWorldUtils; }
 
@@ -31,6 +36,12 @@ namespace AI_BehaviorTree_AIImplementation
         private float BestDistanceToFire = 10.0f;
         public List<AIAction> ComputeAIDecision()
         {
+            if (DebugMode == 1)
+            {
+                timer = new Stopwatch();
+                timer.Start();
+            }
+
             List<AIAction> actionList = new List<AIAction>();
 
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
@@ -74,8 +85,14 @@ namespace AI_BehaviorTree_AIImplementation
             actionList.Add(actionLookAt);
             actionList.Add(new AIActionFire());
 
+            if (DebugMode == 1)
+            {
+                timer.Stop();
+                Console.WriteLine(timer.ElapsedMilliseconds);
+            }
+
             return actionList;
-            Condition close = new Condition(Condition.CloseToTarget);
+            //Condition close = new Condition(Condition.CloseToTarget);
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
