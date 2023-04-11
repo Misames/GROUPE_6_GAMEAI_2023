@@ -22,13 +22,20 @@ namespace AI_BehaviorTree_AIImplementation
         const int DebugMode = 1;
         Stopwatch timer = null;
 
+        // Behavior tree
+        private BehaviourTree myBehaviorTree;
+
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
         public void SetAIId(int parAIId) { AIId = parAIId; }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
         public string GetName() { return "MichelAI"; }
 
-        public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils) { AIGameWorldUtils = parGameWorldUtils; }
+        public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils) { 
+            AIGameWorldUtils = parGameWorldUtils;
+            myBehaviorTree = new BehaviourTree();
+            InitializeBehaviorTree();
+        }
 
         //Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
 
@@ -93,6 +100,11 @@ namespace AI_BehaviorTree_AIImplementation
 
             return actionList;
             //Condition close = new Condition(Condition.CloseToTarget);
+        }
+
+        private void InitializeBehaviorTree()
+        {
+            
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
