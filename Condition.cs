@@ -1,4 +1,7 @@
-﻿namespace AI_BehaviorTree_AIImplementation
+﻿using AI_BehaviorTree_AIGameUtility;
+using System.Collections.Generic;
+
+namespace AI_BehaviorTree_AIImplementation
 {
     public class Condition : Node
     {
@@ -6,13 +9,28 @@
 
         public Del EvaluateCondition;
 
-        public Condition(Del callback) {
-            EvaluateCondition = callback;
+        public Condition() {
+        }
+
+        public void AssignCondition(Del conditionFunction)
+        {
+            EvaluateCondition = conditionFunction;
         }
         
-        public static State CloseToTarget()
+        public State CloseToEnemyTarget()
         {
+            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
+
+            PlayerInformations target = null;
+            foreach (PlayerInformations playerInfo in playerInfos)
+            { 
+                            
+            }
             // test close to target using blackboard
+            if ((bool)data.Blackboard["targetIsEnemy"] == true)
+            {
+
+            }
             return State.SUCCESS;
         }
 

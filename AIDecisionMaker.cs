@@ -49,6 +49,8 @@ namespace AI_BehaviorTree_AIImplementation
                 timer.Start();
             }
 
+            myBehaviorTree.UpdateGameWorldData(ref AIGameWorldUtils);
+
             List<AIAction> actionList = new List<AIAction>();
 
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
@@ -104,6 +106,27 @@ namespace AI_BehaviorTree_AIImplementation
 
         private void InitializeBehaviorTree()
         {
+            List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
+
+            PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
+            myBehaviorTree.data.Blackboard.Add("myPlayerPosition", myPlayerInfo.Transform.Position);
+            myBehaviorTree.data.Blackboard.Add("myPlayerId", myPlayerInfo.PlayerId);
+
+            myBehaviorTree.data.Blackboard.Add("targetPosition", null);
+            myBehaviorTree.data.Blackboard.Add("targetIsEnemy", false);
+            myBehaviorTree.data.Blackboard.Add("enemyProximityLimit", 10);
+
+            Selector selector0 = new Selector();
+            myBehaviorTree.start.Attach(selector0);
+
+            Condition condition0 = new Condition();
+            condition0.AssignCondition(condition0.CloseToEnemyTarget);
+            selector0.Attach(condition0);
+
+            
+
+            
+
             
         }
 

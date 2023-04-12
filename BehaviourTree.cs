@@ -1,18 +1,26 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using AI_BehaviorTree_AIGameUtility;
 
 namespace AI_BehaviorTree_AIImplementation
 {
     class BehaviourTree
     {
         public Node start = null;
-        public Dictionary<string, object> blackboard = null;
+        public Data data;
 
         public BehaviourTree()
         {
-            blackboard = new Dictionary<string, object>();
             start = new Node();
-            start.AssignBlackboard(ref blackboard);
+            data = new Data();
+            data.Blackboard = new Dictionary<string, object>();
+            data.GameWorld = null;
+            start.AssignData(ref data);
+        }
+
+        public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)
+        {
+            data.GameWorld = currentGameWorld;
         }
 
         public void Run()

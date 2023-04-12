@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AI_BehaviorTree_AIGameUtility;
 
 namespace AI_BehaviorTree_AIImplementation
 {
@@ -8,10 +9,15 @@ namespace AI_BehaviorTree_AIImplementation
         RUNNING,
         SUCCESS,
     }
+    public struct Data
+    {
+        public Dictionary<string, object> Blackboard;
+        public GameWorldUtils GameWorld;
+    }
 
     public class Node
     {
-        public Dictionary<string, object> Blackboard = null;
+        public Data data;
 
         protected State state;
         public Node parent;
@@ -34,14 +40,14 @@ namespace AI_BehaviorTree_AIImplementation
         {
             node.parent = this;
             this.children.Add(node);
-            node.AssignBlackboard(ref this.Blackboard);
+            node.AssignData(ref this.data);
         }
 
-        public void AssignBlackboard(ref Dictionary<string, object> data)
+        public void AssignData(ref Data parentData)
         {
-            Blackboard = data;
+            data = parentData;
         }
-
+        
         public virtual State Evaluate() => State.FAILURE;
     }
 }
