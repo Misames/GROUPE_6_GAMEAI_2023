@@ -29,5 +29,13 @@ namespace AI_BehaviorTree_AIImplementation
             nodeList.Add(newSquence);
             return newSquence;
         }
+
+        public Node AddNode()
+        {
+            Node newNode = new Node();
+            newNode.AssignBlackboard(ref blackboard);
+            nodeList.Add(newNode);
+            return newNode;
+        }
     }
 }

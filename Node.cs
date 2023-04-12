@@ -33,13 +33,18 @@ namespace AI_BehaviorTree_AIImplementation
         public void Attach(Node node)
         {
             node.parent = this;
-            this.children.Add(node);
-            node.AssignBlackboard(ref this.Blackboard);
+            children.Add(node);
+            node.AssignBlackboard(ref Blackboard);
         }
 
         public void AssignBlackboard(ref Dictionary<string, object> data)
         {
             Blackboard = data;
+        }
+
+        public override string ToString()
+        {
+            return "nombre de fils : " + children.Count;
         }
 
         public virtual State Evaluate() => State.FAILURE;

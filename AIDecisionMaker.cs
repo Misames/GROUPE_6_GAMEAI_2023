@@ -89,9 +89,13 @@ namespace AI_BehaviorTree_AIImplementation
             var select_0 = myBehaviorTree.AddSelector();
             var sequence_0 = myBehaviorTree.AddSequence();
             var sequence_1 = myBehaviorTree.AddSequence();
+            var node_1 = myBehaviorTree.AddNode();
+            var node_2 = myBehaviorTree.AddNode();
             BehaviourTree.nodeList[0].Attach(select_0);
             select_0.Attach(sequence_0);
             select_0.Attach(sequence_1);
+            sequence_0.Attach(node_1);
+            sequence_1.Attach(node_2);
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
