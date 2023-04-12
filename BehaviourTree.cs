@@ -23,8 +23,25 @@ namespace AI_BehaviorTree_AIImplementation
             data.GameWorld = currentGameWorld;
         }
 
-        public void Run()
+        public Selector AddSelector()
         {
+            Selector newSlector = new Selector();
+            newSlector.AssignData(ref data);
+            return newSlector;
+        }
+
+        public Sequence AddSequence()
+        {
+            Sequence newSquence = new Sequence();
+            newSquence.AssignData(ref data);
+            return newSquence;
+        }
+
+        public Node AddNode()
+        {
+            Node newNode = new Node();
+            newNode.AssignData(ref data);
+            return newNode;
         }
     }
 }

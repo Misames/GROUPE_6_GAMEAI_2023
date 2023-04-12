@@ -47,7 +47,12 @@ namespace AI_BehaviorTree_AIImplementation
         {
             data = parentData;
         }
-        
+
+        public override string ToString()
+        {
+            return "nombre de fils : " + children.Count;
+        }
+
         public virtual State Evaluate() => State.FAILURE;
     }
 }
