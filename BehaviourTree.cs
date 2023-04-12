@@ -1,22 +1,33 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace AI_BehaviorTree_AIImplementation
 {
     class BehaviourTree
     {
-        public Node start = null;
+        public static List<Node> nodeList = new List<Node>();
         public Dictionary<string, object> blackboard = null;
 
         public BehaviourTree()
         {
             blackboard = new Dictionary<string, object>();
-            start = new Node();
-            start.AssignBlackboard(ref blackboard);
+            nodeList.Add(new Node());
+            nodeList[0].AssignBlackboard(ref blackboard);
         }
 
-        public void Run()
+        public Selector AddSelector()
         {
+            Selector newSlector = new Selector();
+            newSlector.AssignBlackboard(ref blackboard);
+            nodeList.Add(newSlector);
+            return newSlector;
+        }
+
+        public Sequence AddSequence()
+        {
+            Sequence newSquence = new Sequence();
+            newSquence.AssignBlackboard(ref blackboard);
+            nodeList.Add(newSquence);
+            return newSquence;
         }
     }
 }

@@ -18,10 +18,6 @@ namespace AI_BehaviorTree_AIImplementation
         private int AIId = -1;
         public GameWorldUtils AIGameWorldUtils = new GameWorldUtils();
 
-        // Debug mode avec un timer pour mesurer le temps de calcul
-        const int DebugMode = 1;
-        Stopwatch timer = null;
-
         // Behavior tree
         private BehaviourTree myBehaviorTree;
 
@@ -39,16 +35,10 @@ namespace AI_BehaviorTree_AIImplementation
 
         //Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
 
-
         private float BestDistanceToFire = 10.0f;
+
         public List<AIAction> ComputeAIDecision()
         {
-            if (DebugMode == 1)
-            {
-                timer = new Stopwatch();
-                timer.Start();
-            }
-
             List<AIAction> actionList = new List<AIAction>();
 
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
@@ -86,25 +76,22 @@ namespace AI_BehaviorTree_AIImplementation
                 actionList.Add(actionMove);
             }
 
-
             AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
             actionLookAt.Position = target.Transform.Position;
             actionList.Add(actionLookAt);
             actionList.Add(new AIActionFire());
 
-            if (DebugMode == 1)
-            {
-                timer.Stop();
-                Console.WriteLine(timer.ElapsedMilliseconds);
-            }
-
             return actionList;
-            //Condition close = new Condition(Condition.CloseToTarget);
         }
 
         private void InitializeBehaviorTree()
         {
-            
+            var select_0 = myBehaviorTree.AddSelector();
+            var sequence_0 = myBehaviorTree.AddSequence();
+            var sequence_1 = myBehaviorTree.AddSequence();
+            BehaviourTree.nodeList[0].Attach(select_0);
+            select_0.Attach(sequence_0);
+            select_0.Attach(sequence_1);
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
