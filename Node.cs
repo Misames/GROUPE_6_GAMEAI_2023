@@ -9,6 +9,7 @@ namespace AI_BehaviorTree_AIImplementation
         RUNNING,
         SUCCESS,
     }
+
     public struct Data
     {
         public Dictionary<string, object> Blackboard;
@@ -17,29 +18,42 @@ namespace AI_BehaviorTree_AIImplementation
 
     public class Node
     {
-        public Data data;
+        public static uint nbNode;
 
+        protected string name;
+        protected Data data;
         protected State state;
-        public Node parent;
+        protected Node parent;
         protected List<Node> children = new List<Node>();
 
         public Node()
         {
+            name = string.Empty;
             parent = null;
+        }
+
+        public Node(Node parent)
+        {
+            name= string.Empty;
+            this.parent = parent;
+        }
+
+        public Node(string name, Node parent)
+        {
+            this.name = name;
+            this.parent = parent;
         }
 
         public Node(List<Node> children)
         {
             foreach (Node node in children)
-            {
                 Attach(node);
-            }
         }
 
         public void Attach(Node node)
         {
             node.parent = this;
-            this.children.Add(node);
+            children.Add(node);
             node.AssignData(ref this.data);
         }
 
@@ -50,9 +64,14 @@ namespace AI_BehaviorTree_AIImplementation
 
         public override string ToString()
         {
-            return "nombre de fils : " + children.Count;
+            return name;
         }
 
+        /// <summary>
+        /// Permet de tester l'état du Node <br />
+        /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
+        /// Par défaut retourne une FAILURE
+        /// </summary>
         public virtual State Evaluate() => State.FAILURE;
     }
 }

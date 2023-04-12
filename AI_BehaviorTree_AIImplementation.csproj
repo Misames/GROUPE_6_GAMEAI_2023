@@ -142,7 +142,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.3.22f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>.\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

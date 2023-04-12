@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using AI_BehaviorTree_AIGameUtility;
 
 namespace AI_BehaviorTree_AIImplementation
@@ -42,6 +41,13 @@ namespace AI_BehaviorTree_AIImplementation
             Node newNode = new Node();
             newNode.AssignData(ref data);
             return newNode;
+        }
+
+        public Condition AddCondition()
+        {
+            Condition newCondition = new Condition();
+            newCondition.AssignCondition(newCondition.CloseToEnemyTarget);
+            return newCondition;
         }
     }
 }

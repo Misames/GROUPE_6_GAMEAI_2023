@@ -1,6 +1,4 @@
-﻿using AI_BehaviorTree_AIGameUtility;
-
-namespace AI_BehaviorTree_AIImplementation
+﻿namespace AI_BehaviorTree_AIImplementation
 {
     public class Action : Node
     {
@@ -18,6 +16,7 @@ namespace AI_BehaviorTree_AIImplementation
             // test close to target using blackboard
             return State.SUCCESS;
         }
+
         public override State Evaluate()
         {
             state = DoAction();
@@ -40,6 +39,7 @@ namespace AI_BehaviorTree_AIImplementation
                     }
                 }
             }
+
             return state;
         }
     }

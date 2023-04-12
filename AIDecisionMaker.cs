@@ -1,7 +1,5 @@
-﻿using AI_BehaviorTree_AIGameUtility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
+using AI_BehaviorTree_AIGameUtility;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -27,7 +25,8 @@ namespace AI_BehaviorTree_AIImplementation
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
         public string GetName() { return "MichelAI"; }
 
-        public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils) { 
+        public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
+        {
             AIGameWorldUtils = parGameWorldUtils;
             myBehaviorTree = new BehaviourTree();
             InitializeBehaviorTree();
@@ -39,12 +38,6 @@ namespace AI_BehaviorTree_AIImplementation
 
         public List<AIAction> ComputeAIDecision()
         {
-            if (DebugMode == 1)
-            {
-                timer = new Stopwatch();
-                timer.Start();
-            }
-
             myBehaviorTree.UpdateGameWorldData(ref AIGameWorldUtils);
 
             List<AIAction> actionList = new List<AIAction>();
@@ -100,33 +93,29 @@ namespace AI_BehaviorTree_AIImplementation
             PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
             myBehaviorTree.data.Blackboard.Add("myPlayerPosition", myPlayerInfo.Transform.Position);
             myBehaviorTree.data.Blackboard.Add("myPlayerId", myPlayerInfo.PlayerId);
-
             myBehaviorTree.data.Blackboard.Add("targetPosition", null);
             myBehaviorTree.data.Blackboard.Add("targetIsEnemy", false);
             myBehaviorTree.data.Blackboard.Add("enemyProximityLimit", 10);
 
-            Selector selector0 = new Selector();
-            myBehaviorTree.start.Attach(selector0);
+            // Creation statique d'un Behaviour tree
+            // en 2 étapes : 1 ajouter les nodes 2 les liers
 
-            Condition condition0 = new Condition();
-            condition0.AssignCondition(condition0.CloseToEnemyTarget);
-            selector0.Attach(condition0);
-
-            
-            // François
-            
-
-            
-            var select_0 = myBehaviorTree.AddSelector();
+            // creation des nodes
+            var selector_0 = myBehaviorTree.AddSelector();
             var sequence_0 = myBehaviorTree.AddSequence();
             var sequence_1 = myBehaviorTree.AddSequence();
+            var node_0 = myBehaviorTree.AddNode();
             var node_1 = myBehaviorTree.AddNode();
-            var node_2 = myBehaviorTree.AddNode();
-            BehaviourTree.nodeList[0].Attach(select_0);
-            select_0.Attach(sequence_0);
-            select_0.Attach(sequence_1);
-            sequence_0.Attach(node_1);
-            sequence_1.Attach(node_2);
+            var condition_0 = new Condition();
+            condition_0.AssignCondition(condition_0.CloseToEnemyTarget);
+            
+            // liaison des nodes
+            myBehaviorTree.start.Attach(selector_0);
+            selector_0.Attach(sequence_0);
+            selector_0.Attach(sequence_1);
+            sequence_0.Attach(condition_0);
+            sequence_0.Attach(node_0);
+            sequence_1.Attach(node_1);
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
