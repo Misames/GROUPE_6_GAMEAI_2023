@@ -21,7 +21,7 @@ namespace AI_BehaviorTree_AIImplementation
         public void SetAIId(int parAIId) { AIId = parAIId; }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() { return "MichelAI"; }
+        public string GetName() { return "SamyAI"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
         {
