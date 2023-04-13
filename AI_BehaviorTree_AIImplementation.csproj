@@ -128,6 +128,7 @@
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selector.cs" />
+    <Compile Include="TargetManager.cs" />
     <Compile Include="Sequence.cs" />
     <EmbeddedResource Include="Properties\AI_BehaviorTree_AIImplementation.rd.xml" />
   </ItemGroup>

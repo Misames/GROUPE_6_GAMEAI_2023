@@ -90,6 +90,8 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard["targetPosition"] = null;
             myBehaviorTree.data.Blackboard["targetIsEnemy"] = false;
             myBehaviorTree.data.Blackboard["enemyProximityLimit"] = 10;
+            Enemy[] enemies = new Enemy[AIId];
+            myBehaviorTree.data.Blackboard["chosenTarget"] = enemies[0];
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
