@@ -9,7 +9,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del EvaluateCondition;
 
-        public Condition() { }
+        public Condition() { name = "new condition"; }
 
         public void AssignCondition(Del conditionFunction)
         {

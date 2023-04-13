@@ -6,12 +6,9 @@
 
         public Del DoAction;
 
-        public Action(Del callback)
-        {
-            DoAction = callback;
-        }
+        public Action() { name = "new action"; }
 
-        public static State ActionCombat()
+        public State ActionCombat()
         {
             // test close to target using blackboard
             return State.SUCCESS;

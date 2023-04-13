@@ -10,7 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public BehaviourTree()
         {
-            start = new Node();
+            start = new Node("root");
             data = new Data();
             data.Blackboard = new Dictionary<string, object>();
             data.GameWorld = null;
@@ -20,8 +20,8 @@ namespace AI_BehaviorTree_AIImplementation
             data.Blackboard.Add("targetPosition", null);
             data.Blackboard.Add("targetIsEnemy", false);
             data.Blackboard.Add("enemyProximityLimit", 10);
-
             InitSimpleTree();
+            ParseNodes(start);
         }
 
         public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)
@@ -29,31 +29,45 @@ namespace AI_BehaviorTree_AIImplementation
             data.GameWorld = currentGameWorld;
         }
 
+        /// <summary>
+        /// Creation statique d'un Behaviour tree 
+        /// en 2 étapes : 1 ajouter les nodes 2 les liers
+        /// </summary>
         public void InitSimpleTree()
         {
-
-
-            // Creation statique d'un Behaviour tree
-            // en 2 étapes : 1 ajouter les nodes 2 les liers
-
             // creation des nodes
-            var selector_0 = AddSelector();
-            var sequence_0 = AddSequence();
-            var sequence_1 = AddSequence();
-            var node_0 = AddNode();
-            var node_1 = AddNode();
-            var condition_0 = new Condition();
-            condition_0.AssignCondition(condition_0.CloseToEnemyTarget);
+            Selector selector_0 = AddSelector();
+            Sequence sequence_0 = AddSequence();
+            Sequence sequence_1 = AddSequence();
+            Node node_0 = AddNode();
+            Node node_1 = AddNode();
 
             // liaison des nodes
             start.Attach(selector_0);
             selector_0.Attach(sequence_0);
             selector_0.Attach(sequence_1);
-            sequence_0.Attach(condition_0);
             sequence_0.Attach(node_0);
             sequence_1.Attach(node_1);
+        }
 
-            UnityEngine.Debug.LogError("arbre fini ! UwU");
+       /// <summary>
+       ///  Lance la fonction d'évalutation de toutes les nodes de notre arbre
+       /// </summary>
+       /// <param name="node"></param>
+        public void ParseNodes(Node node)
+        {
+            foreach (Node child in node.children)
+            {
+                child.Evaluate();
+                ParseNodes(child);
+            }
+        }
+
+        public Node AddNode()
+        {
+            Node newNode = new Node();
+            newNode.AssignData(ref data);
+            return newNode;
         }
 
         public Selector AddSelector()
@@ -70,18 +84,19 @@ namespace AI_BehaviorTree_AIImplementation
             return newSquence;
         }
 
-        public Node AddNode()
-        {
-            Node newNode = new Node();
-            newNode.AssignData(ref data);
-            return newNode;
-        }
-
         public Condition AddCondition()
         {
             Condition newCondition = new Condition();
+            newCondition.AssignData(ref data);
             newCondition.AssignCondition(newCondition.CloseToEnemyTarget);
             return newCondition;
+        }
+
+        public Action AddAction()
+        {
+            Action newAction = new Action();
+            newAction.AssignData(ref data);
+            return newAction;
         }
     }
 }

@@ -20,26 +20,40 @@ namespace AI_BehaviorTree_AIImplementation
     {
         public static uint nbNode;
 
-        protected string name;
-        protected Data data;
-        protected State state;
-        protected Node parent;
-        protected List<Node> children = new List<Node>();
+        public string name;
+        public State state = State.FAILURE;
+        public Data data;
+        public Node parent;
+        public List<Node> children = new List<Node>();
+
+        ~Node()
+        {
+            nbNode -= 1;
+        }
 
         public Node()
         {
-            name = string.Empty;
+            nbNode += 1;
+            name = "new node " + nbNode;
             parent = null;
+        }
+
+        public Node(string name)
+        {
+            nbNode += 1;
+            this.name = name;
         }
 
         public Node(Node parent)
         {
-            name= string.Empty;
+            nbNode += 1;
+            name = "new node " + nbNode;
             this.parent = parent;
         }
 
         public Node(string name, Node parent)
         {
+            nbNode += 1;
             this.name = name;
             this.parent = parent;
         }
@@ -50,21 +64,24 @@ namespace AI_BehaviorTree_AIImplementation
                 Attach(node);
         }
 
-        public void Attach(Node node)
+        /// <summary>
+        /// Fonction permetant de faire la liaison entre toutes nos nodes dans notre arbre
+        /// </summary>
+        /// <param name="childNode">futur fils de la node actuel</param>
+        public void Attach(Node childNode)
         {
-            node.parent = this;
-            children.Add(node);
-            node.AssignData(ref this.data);
+            childNode.parent = this;
+            children.Add(childNode);
+            childNode.AssignData(ref data);
         }
 
+        /// <summary>
+        /// Permet de donner un acces aux données du world
+        /// </summary>
+        /// <param name="parentData"></param>
         public void AssignData(ref Data parentData)
         {
             data = parentData;
-        }
-
-        public override string ToString()
-        {
-            return name;
         }
 
         /// <summary>
