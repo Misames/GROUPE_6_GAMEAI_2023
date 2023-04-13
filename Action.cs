@@ -6,12 +6,17 @@
 
         public Del DoAction;
 
-        public Action(Del callback)
+        public Action()
         {
-            DoAction = callback;
+            nodeType = NodeType.ACTION;
         }
 
-        public static State ActionCombat()
+        public void AssignAction(Del actionFunction)
+        {
+            DoAction = actionFunction;
+        }
+
+        public State ActionCombat()
         {
             // test close to target using blackboard
             return State.SUCCESS;

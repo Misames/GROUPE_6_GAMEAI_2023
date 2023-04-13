@@ -15,45 +15,16 @@ namespace AI_BehaviorTree_AIImplementation
             data.Blackboard = new Dictionary<string, object>();
             data.GameWorld = null;
             start.AssignData(ref data);
-            data.Blackboard.Add("myPlayerPosition", null);
-            data.Blackboard.Add("myPlayerId", null);
-            data.Blackboard.Add("targetPosition", null);
-            data.Blackboard.Add("targetIsEnemy", false);
-            data.Blackboard.Add("enemyProximityLimit", 10);
-
-            InitSimpleTree();
         }
 
-        public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)
+        public void Compute()
+        {
+            start.Evaluate();
+        }
+
+        public void UpdateGameWorldData(GameWorldUtils currentGameWorld)
         {
             data.GameWorld = currentGameWorld;
-        }
-
-        public void InitSimpleTree()
-        {
-
-
-            // Creation statique d'un Behaviour tree
-            // en 2 étapes : 1 ajouter les nodes 2 les liers
-
-            // creation des nodes
-            var selector_0 = AddSelector();
-            var sequence_0 = AddSequence();
-            var sequence_1 = AddSequence();
-            var node_0 = AddNode();
-            var node_1 = AddNode();
-            var condition_0 = new Condition();
-            condition_0.AssignCondition(condition_0.CloseToEnemyTarget);
-
-            // liaison des nodes
-            start.Attach(selector_0);
-            selector_0.Attach(sequence_0);
-            selector_0.Attach(sequence_1);
-            sequence_0.Attach(condition_0);
-            sequence_0.Attach(node_0);
-            sequence_1.Attach(node_1);
-
-            UnityEngine.Debug.LogError("arbre fini ! UwU");
         }
 
         public Selector AddSelector()
@@ -70,17 +41,17 @@ namespace AI_BehaviorTree_AIImplementation
             return newSquence;
         }
 
-        public Node AddNode()
+        public Action AddAction()
         {
-            Node newNode = new Node();
-            newNode.AssignData(ref data);
-            return newNode;
+            Action newAction = new Action();
+            newAction.AssignData(ref data);
+            return newAction;
         }
 
         public Condition AddCondition()
         {
             Condition newCondition = new Condition();
-            newCondition.AssignCondition(newCondition.CloseToEnemyTarget);
+            newCondition.AssignData(ref data);
             return newCondition;
         }
     }
