@@ -18,13 +18,13 @@ namespace AI_BehaviorTree_AIImplementation
 
     public class Node
     {
-        public static uint nbNode;
+        private static uint nbNode;
 
-        public string name;
-        public State state = State.FAILURE;
-        public Data data;
-        public Node parent;
-        public List<Node> children = new List<Node>();
+        protected string name;
+        protected State state = State.FAILURE;
+        protected Data data;
+        protected Node parent;
+        protected List<Node> children = new List<Node>();
 
         ~Node()
         {
@@ -42,6 +42,7 @@ namespace AI_BehaviorTree_AIImplementation
         {
             nbNode += 1;
             this.name = name;
+            UnityEngine.Debug.LogError(name);
         }
 
         public Node(Node parent)
@@ -87,8 +88,20 @@ namespace AI_BehaviorTree_AIImplementation
         /// <summary>
         /// Permet de tester l'état du Node <br />
         /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
-        /// Par défaut retourne une FAILURE
         /// </summary>
         public virtual State Evaluate() => State.FAILURE;
+
+        /// <summary>
+        ///  Lance la fonction d'évalutation de toutes les nodes de notre arbre
+        /// </summary>
+        public void ParseNodes()
+        {
+            foreach (Node child in children)
+            {
+                UnityEngine.Debug.LogError(child.name);
+                child.Evaluate();
+                child.ParseNodes();
+            }
+        }
     }
 }

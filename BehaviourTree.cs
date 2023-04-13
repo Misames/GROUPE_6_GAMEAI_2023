@@ -5,7 +5,7 @@ namespace AI_BehaviorTree_AIImplementation
 {
     class BehaviourTree
     {
-        public Node start = null;
+        private readonly Node start;
         public Data data;
 
         public BehaviourTree()
@@ -14,14 +14,14 @@ namespace AI_BehaviorTree_AIImplementation
             data = new Data();
             data.Blackboard = new Dictionary<string, object>();
             data.GameWorld = null;
-            start.AssignData(ref data);
             data.Blackboard.Add("myPlayerPosition", null);
             data.Blackboard.Add("myPlayerId", null);
             data.Blackboard.Add("targetPosition", null);
             data.Blackboard.Add("targetIsEnemy", false);
             data.Blackboard.Add("enemyProximityLimit", 10);
+            start.AssignData(ref data);
             InitSimpleTree();
-            ParseNodes(start);
+            start.ParseNodes();
         }
 
         public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)
@@ -33,34 +33,21 @@ namespace AI_BehaviorTree_AIImplementation
         /// Creation statique d'un Behaviour tree 
         /// en 2 étapes : 1 ajouter les nodes 2 les liers
         /// </summary>
-        public void InitSimpleTree()
+        private void InitSimpleTree()
         {
             // creation des nodes
             Selector selector_0 = AddSelector();
             Sequence sequence_0 = AddSequence();
             Sequence sequence_1 = AddSequence();
-            Node node_0 = AddNode();
-            Node node_1 = AddNode();
+            Attack attack_0 = AddAttack();
+            Attack attack_1 = AddAttack();
 
             // liaison des nodes
             start.Attach(selector_0);
             selector_0.Attach(sequence_0);
+            sequence_0.Attach(attack_0);
             selector_0.Attach(sequence_1);
-            sequence_0.Attach(node_0);
-            sequence_1.Attach(node_1);
-        }
-
-       /// <summary>
-       ///  Lance la fonction d'évalutation de toutes les nodes de notre arbre
-       /// </summary>
-       /// <param name="node"></param>
-        public void ParseNodes(Node node)
-        {
-            foreach (Node child in node.children)
-            {
-                child.Evaluate();
-                ParseNodes(child);
-            }
+            sequence_1.Attach(attack_1);
         }
 
         public Node AddNode()
@@ -97,6 +84,13 @@ namespace AI_BehaviorTree_AIImplementation
             Action newAction = new Action();
             newAction.AssignData(ref data);
             return newAction;
+        }
+
+        public Attack AddAttack()
+        {
+            Attack newAttack = new Attack();
+            newAttack.AssignData(ref data);
+            return newAttack;
         }
     }
 }

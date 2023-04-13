@@ -4,9 +4,13 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class Sequence : Node
     {
-        public Sequence() : base() { name = "new sequence"; }
+        public Sequence() : base() { 
+            name = "new sequence";
+        }
 
-        public Sequence(List<Node> children) : base(children) { name = "new sequence"; }
+        public Sequence(List<Node> children) : base(children) { 
+            name = "new sequence";
+        }
 
         public override State Evaluate()
         {
