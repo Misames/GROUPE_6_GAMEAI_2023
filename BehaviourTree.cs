@@ -4,6 +4,7 @@ using System.Numerics;
 using AI_BehaviorTree_AIGameUtility;
 using UnityEngine;
 using Windows.UI.Xaml.Controls;
+using Vector3 = UnityEngine.Vector3;
 
 namespace AI_BehaviorTree_AIImplementation
 {
@@ -36,8 +37,8 @@ namespace AI_BehaviorTree_AIImplementation
 
         public void UpdateGameWorldData(ref GameWorldUtils gameWorld)
         {
-            data.GameWorld = currentGameWorld;
-            targetManager.UpdateGameWorldData(ref gameWorld, currentGameWorld);
+            data.GameWorld = gameWorld;
+            targetManager.UpdateGameWorldData(ref gameWorld);
         }
 
         public void InitSimpleTree()
@@ -103,9 +104,9 @@ namespace AI_BehaviorTree_AIImplementation
 
         public void Update(Enemy chosenTarget)
         {
-            Enemy chosenTarget = GetChoosenTarget();
+            Enemy target = GetChoosenTarget();
             Vector3 predictedPos = (Vector3)data.Blackboard["predictedTargetPos"];
-            targetManager.TrackTargetMovement(chosenTarget.transform);
+            targetManager.UpdateTargetPosition(target, predictedPos);
         }
 
         public Enemy GetChoosenTarget()

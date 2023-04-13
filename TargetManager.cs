@@ -7,6 +7,7 @@ class Enemy
 {
     public float closingSpeed;
     public float speed;
+    internal GameObject transform;
 }
 
 static class EnemyArrayExtensions
@@ -25,7 +26,7 @@ class TargetManager
     public Enemy ChooseTarget(Enemy[] enemies)
     {
         // Parcours la liste des ennemis et choisis le meilleur 
-        chosenTarget = enemies[0];
+        chosenTarget = enemies[1];
         for (int i = 1; i < enemies.Length; i++)
         {
             if (enemies[i].closingSpeed > chosenTarget.closingSpeed)
@@ -41,7 +42,7 @@ class TargetManager
         //mise à jour des données du jeu actuel
     }
 
-    public void TrackTargetMovement(Transform targetTransform)
+    public void TrackTargetMovement(object v1, object v, Transform targetTransform)
     {
         // Suit le déplacement de la cible d'une frame à l'autre 
         predictedTargetPos = targetTransform.position;
@@ -57,7 +58,16 @@ class TargetManager
         }
         return pos;
     }
-    
+
+    internal void TrackTargetMovement(object v, Enemy target, Vector3 predictedPos)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void UpdateTargetPosition(Enemy target, Vector3 predictedPos)
+    {
+        throw new NotImplementedException();
+    }
 }
 static class TargetManagerExtensions
 {
