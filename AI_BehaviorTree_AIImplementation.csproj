@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="AIDecisionMaker.cs" />
+    <Compile Include="Attack.cs" />
     <Compile Include="BehaviourTree.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="Node.cs" />

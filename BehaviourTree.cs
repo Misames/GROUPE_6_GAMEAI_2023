@@ -5,7 +5,7 @@ namespace AI_BehaviorTree_AIImplementation
 {
     class BehaviourTree
     {
-        public Node start = null;
+        public Node start;
         public Data data;
 
         public BehaviourTree()

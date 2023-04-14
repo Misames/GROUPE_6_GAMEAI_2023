@@ -50,7 +50,6 @@ namespace AI_BehaviorTree_AIImplementation
 
         //Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
 
-        private float BestDistanceToFire = 10.0f;
 
         public List<AIAction> ComputeAIDecision()
         {

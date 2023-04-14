@@ -28,18 +28,31 @@ namespace AI_BehaviorTree_AIImplementation
 
     public class Node
     {
-        public static uint nbNode;
+        private static uint nbNode;
 
         protected NodeType nodeType;
         protected Data data;
+
         protected State state;
         protected Node parent;
         protected List<Node> children = new List<Node>();
 
+        ~Node()
+        {
+            nbNode -= 1;
+        }
+
         public Node()
         {
+            nbNode += 1;
             nodeType = NodeType.NODE;
             parent = null;
+        }
+
+        public Node(NodeType nType)
+        {
+            nbNode += 1;
+            this.nodeType = nType;
         }
 
         public Node(Node parent)
@@ -60,13 +73,21 @@ namespace AI_BehaviorTree_AIImplementation
                 Attach(node);
         }
 
-        public void Attach(Node node)
+        /// <summary>
+        /// Fonction permetant de faire la liaison entre toutes nos nodes dans notre arbre
+        /// </summary>
+        /// <param name="childNode">futur fils de la node actuel</param>
+        public void Attach(Node childNode)
         {
-            node.parent = this;
-            children.Add(node);
-            node.AssignData(ref this.data);
+            childNode.parent = this;
+            children.Add(childNode);
+            childNode.AssignData(ref data);
         }
 
+        /// <summary>
+        /// Permet de donner un acces aux données du world
+        /// </summary>
+        /// <param name="parentData"></param>
         public void AssignData(ref Data parentData)
         {
             data = parentData;
@@ -109,7 +130,6 @@ namespace AI_BehaviorTree_AIImplementation
         /// <summary>
         /// Permet de tester l'état du Node <br />
         /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
-        /// Par défaut retourne une FAILURE
         /// </summary>
         public virtual State Evaluate()
         {
