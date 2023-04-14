@@ -36,10 +36,10 @@ namespace AI_BehaviorTree_AIImplementation
         public string GetName() {
             if (debug_mode == 2)
             {
-                UnityEngine.Debug.LogError("GetName " + "Michel");
+                UnityEngine.Debug.LogError("GetName " + "Samy");
             }
 
-            return "MichelAI"; 
+            return "SamyAI"; 
         }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
@@ -118,6 +118,7 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetPosition, null);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetIsEnemy, false);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.enemyProximityLimit, 10);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.bulletIncoming, false);
 
             // Creation statique d'un Behaviour tree
             // en 2 étapes : 1 ajouter les nodes 2 les liers
@@ -129,16 +130,22 @@ namespace AI_BehaviorTree_AIImplementation
             Action actionFindTarget = myBehaviorTree.AddAction();
             Action actionShoot = myBehaviorTree.AddAction();
             Action actionMoveToTarget = myBehaviorTree.AddAction();
+            Condition conditionBulletIncoming= myBehaviorTree.AddCondition();
+            Action actionDogeBullet = myBehaviorTree.AddAction();
 
-
+            conditionBulletIncoming.AssignCondition(conditionBulletIncoming.BulletIncoming);
             //conditionEnemyInSight.AssignCondition(conditionEnemyInSight.EnemyInSight);
             actionFindTarget.AssignAction(actionFindTarget.ActionFindTarget);
             actionShoot.AssignAction(actionShoot.ActionShoot);
             actionMoveToTarget.AssignAction(actionMoveToTarget.ActionMoveToTarget);
+            actionDogeBullet.AssignAction(actionDogeBullet.ActionDogeBullet);
 
+
+            sequenceCombat.Attach(actionDogeBullet);
             sequenceCombat.Attach(actionFindTarget);
             sequenceCombat.Attach(actionShoot);
             sequenceCombat.Attach(actionMoveToTarget);
+            
 
             //selectorStart.Attach(conditionEnemyInSight);
             selectorStart.Attach(sequenceCombat);
@@ -161,6 +168,7 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard[BlackboardVariable.targetPosition] = null;
             myBehaviorTree.data.Blackboard[BlackboardVariable.targetIsEnemy] = false;
             myBehaviorTree.data.Blackboard[BlackboardVariable.enemyProximityLimit] = 10;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.bulletIncoming] = false;
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)

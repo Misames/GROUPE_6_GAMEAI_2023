@@ -58,6 +58,28 @@ namespace AI_BehaviorTree_AIImplementation
             return State.SUCCESS;
         }
 
+        public State BulletIncoming()
+        {
+            Data data = BehaviourTree.Instance().data;
+            UnityEngine.Debug.LogError("bulletIncoming");
+            List<ProjectileInformations> playerInfos = data.GameWorld.GetProjectileInfosList();
+            Vector3 myPlayerPos = (Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition];
+            PlayerInformations target = null;
+            foreach (ProjectileInformations projectileinfo in playerInfos)
+            {
+
+                if (projectileinfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
+                {
+                    RaycastHit[] hits = Physics.RaycastAll(myPlayerPos, projectileinfo.Transform.Position, 100f);
+                    foreach (RaycastHit hit in hits)
+                    {
+                        //UnityEngine.Debug.LogError(hit.collider.gameObject.name);
+                    }
+                }
+            }
+            return State.SUCCESS;
+        }
+
         public override State Evaluate()
         {
             //UnityEngine.Debug.LogError("condition");
