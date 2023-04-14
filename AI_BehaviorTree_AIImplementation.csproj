@@ -7,11 +7,11 @@
     <ProjectGuid>{B8AB6DF7-A5F6-408B-A1CC-85F7CC22B68A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AI_BehaviorTree_AIImplementation_1</RootNamespace>
-    <AssemblyName>AI_BehaviorTree_AIImplementation_1</AssemblyName>
+    <RootNamespace>AI_BehaviorTree_AIImplementation</RootNamespace>
+    <AssemblyName>AI_BehaviorTree_AIImplementation_3</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22000.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -31,11 +31,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateLibraryLayout>false</GenerateLibraryLayout>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -134,17 +134,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.10</Version>
+      <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AI_BehaviorTree_AIGameUtility">
-      <HintPath>..\RedLock\Red Lock_Data\Managed\AI_BehaviorTree_AIGameUtility.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Properties\AI_BehaviorTree_AIGameUtility.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\Unity\Hub\Editor\2021.3.22f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>Properties\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

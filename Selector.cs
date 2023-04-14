@@ -10,7 +10,6 @@ namespace AI_BehaviorTree_AIImplementation
 
         public override State privateEvaluate()
         {
-            //UnityEngine.Debug.LogError("selector");
             foreach (Node child in children)
             {
                 switch (child.Evaluate())

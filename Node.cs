@@ -57,11 +57,11 @@ namespace AI_BehaviorTree_AIImplementation
             {
                 state = privateEvaluate();
                 uint i = 0;
-                if(state == State.FAILURE)
+                if (state == State.FAILURE)
                 {
-                    while(i<decorator.retry && state != State.SUCCESS)
+                    while (i < decorator.retry && state != State.SUCCESS)
                     {
-                        state = privateEvaluate() ;
+                        state = privateEvaluate();
                         i++;
                     }
                 }
@@ -70,12 +70,10 @@ namespace AI_BehaviorTree_AIImplementation
             else if (decorator.type == DecoratorType.REPEAT)
             {
                 for (int i = 0; i < decorator.repetition; i++)
-                {
                     state = privateEvaluate();
-                }
                 return state;
             }
-            
+
             state = privateEvaluate();
             return state;
         }

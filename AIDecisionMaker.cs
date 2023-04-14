@@ -6,7 +6,7 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class AIDecisionMaker
     {
-        private BehaviourTree myBehaviorTree = new BehaviourTree();
+        private readonly BehaviourTree myBehaviorTree = new BehaviourTree();
 
         /// <summary>
         /// Ne pas supprimer des fonctions, ou changer leur signature sinon la DLL ne fonctionnera plus
@@ -18,13 +18,14 @@ namespace AI_BehaviorTree_AIImplementation
         public GameWorldUtils AIGameWorldUtils = new GameWorldUtils();
 
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
-        public void SetAIId(int parAIId) {
+        public void SetAIId(int parAIId)
+        {
             AIId = parAIId;
             InitializeBehaviorTree();
         }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() { return "MichelAI"; }
+        public string GetName() { return "WiZaR"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
         {
@@ -36,9 +37,7 @@ namespace AI_BehaviorTree_AIImplementation
         public List<AIAction> ComputeAIDecision()
         {
             BehaviourTree.Instance().UpdateGameWorldData(AIGameWorldUtils);
-            List<AIAction> actionList = new List<AIAction>();
-            actionList = myBehaviorTree.Compute();
-            return actionList;
+            return myBehaviorTree.Compute();
         }
 
         private void InitializeBehaviorTree()

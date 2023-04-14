@@ -1,5 +1,5 @@
-﻿using AI_BehaviorTree_AIGameUtility;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AI_BehaviorTree_AIGameUtility;
 using UnityEngine;
 
 namespace AI_BehaviorTree_AIImplementation
@@ -10,7 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del DoAction;
 
-        public Action() : base(){ }
+        public Action() : base() { }
 
         public void AssignAction(Del actionFunction)
         {

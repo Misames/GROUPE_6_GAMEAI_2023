@@ -10,7 +10,8 @@
         RETRY,
     }
 
-    public struct Decorator{
+    public struct Decorator
+    {
         public DecoratorType type;
         public int retry;
         public int repetition;
