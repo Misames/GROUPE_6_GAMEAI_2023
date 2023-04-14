@@ -15,6 +15,7 @@ namespace AI_BehaviorTree_AIImplementation
         myPlayerPosition,
         myPlayerId,
         playerRotation,
+        bonusTarget,
         target,
         targetPosition,
         targetIsEnemy,

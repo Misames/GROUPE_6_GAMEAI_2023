@@ -12,7 +12,8 @@ namespace AI_BehaviorTree_AIImplementation
     {
 
         public SelectTargetNode()
-        { }
+        {
+        }
 
         public override State Evaluate(Data d)
         {
@@ -30,7 +31,7 @@ namespace AI_BehaviorTree_AIImplementation
                 playerInfos.Add(playerInfo);
             }
 
-            if(playerInfos.Count == 0) return State.FAILURE;
+            if (playerInfos.Count == 0) return State.FAILURE;
 
             PlayerInformations target = playerInfos[0];
 

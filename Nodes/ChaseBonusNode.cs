@@ -9,30 +9,58 @@ namespace AI_BehaviorTree_AIImplementation
 
         public ChaseBonusNode() { }
 
-        public override State Evaluate(Data data)
+        public override State Evaluate(Data d)
         {
-            List<BonusInformations> bonus = data.GameWorld.GetBonusInfosList();
 
-            var minDistance = Vector3.Distance(bonus[0].Position, (Vector3)data.Blackboard[(int)BlackboardEnum.myPlayerPosition]);
-            var minVector = bonus[0].Position;
+            #region Player 
+
+            PlayerInformations player = null;
+
+            AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
+            AIActionDash actionDash = new AIActionDash();
+
+            foreach (var p in d.GameWorld.GetPlayerInfosList())
+            {
+                if (p.PlayerId == (int)d.Blackboard[(int)BlackboardEnum.myPlayerId])
+                {
+                    player = p;
+                    break;
+                }
+            }
+
+            if (player == null) return State.SUCCESS;
+
+            #endregion
+
+            List<BonusInformations> bonus = d.GameWorld.GetBonusInfosList();
+
+            if (bonus == null || bonus.Count == 0) return State.FAILURE;
+
+            var minDistance = Vector3.Distance(bonus[0].Position, (Vector3)d.Blackboard[(int)BlackboardEnum.myPlayerPosition]);
+            var minBonus = bonus[0];
 
             foreach (var b in bonus)
             {
-
-                var distanceFromBonus = Vector3.Distance(b.Position, (Vector3)data.Blackboard[(int)BlackboardEnum.myPlayerPosition]);
+                var distanceFromBonus = Vector3.Distance(b.Position, (Vector3)d.Blackboard[(int)BlackboardEnum.myPlayerPosition]);
 
                 if (distanceFromBonus < minDistance)
                 {
                     minDistance = distanceFromBonus;
-                    minVector = b.Position;
+                    minBonus = b;
                 }
-                
+
             }
 
-            AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
-            actionMove.Position = minVector;
+            actionMove.Position = minBonus.Position;
 
-            ((List<AIAction>)data.Blackboard[(int)BlackboardEnum.actionList]).Add(actionMove);
+            if(player.IsDashAvailable)
+            {
+                actionDash.Direction = minBonus.Position;
+                ((List<AIAction>)d.Blackboard[(int)BlackboardEnum.actionList]).Add(actionDash);
+            }
+
+            ((List<AIAction>)d.Blackboard[(int)BlackboardEnum.actionList]).Add(actionMove);
+            d.Blackboard[(int)BlackboardEnum.bonusTarget] = minBonus;
 
             return State.SUCCESS;
 

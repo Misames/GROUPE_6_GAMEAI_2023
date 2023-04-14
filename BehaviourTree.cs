@@ -18,6 +18,7 @@ namespace AI_BehaviorTree_AIImplementation
             data.Blackboard.Add(null); // Player Position
             data.Blackboard.Add(null); //Player ID
             data.Blackboard.Add(null); //Player Rotation
+            data.Blackboard.Add(null); //bonus target
             data.Blackboard.Add(null); // Target
             data.Blackboard.Add(null); // Target position
             data.Blackboard.Add(false); // target is enemy

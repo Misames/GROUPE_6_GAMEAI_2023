@@ -21,7 +21,7 @@ namespace AI_BehaviorTree_AIImplementation
         public void SetAIId(int parAIId) { AIId = parAIId; }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() { return "MichelAI"; }
+        public string GetName() { return "TOM AI"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
         {
@@ -47,25 +47,20 @@ namespace AI_BehaviorTree_AIImplementation
 
             actionList = (List<AIAction>)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList];
 
-            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
-            actionLookAt.Position = ((PlayerInformations)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.target]).Transform.Position;
-            actionList.Add(actionLookAt);
-            actionList.Add(new AIActionFire());
-
             return actionList;
         }
 
         private void InitializeBehaviorTree()
         {
 
+            ChaseBonusNode chaseBonusNode = new ChaseBonusNode();
             SelectTargetNode selectTargetNode = new SelectTargetNode();
             ChaseNode chaseNode = new ChaseNode();
             ProjectileInPlayerDirectionNode projectileInPlayerDirectionNode = new ProjectileInPlayerDirectionNode();
-            ChaseBonusNode chaseBonusNode = new ChaseBonusNode();
-
+            ShootNode shootNode = new ShootNode();
 
             Sequence chaseSequence = new Sequence(new List<Node>() { selectTargetNode, chaseNode });
-            Selector topSelector = new Selector(new List<Node>() { projectileInPlayerDirectionNode, chaseBonusNode, chaseSequence });
+            Selector topSelector = new Selector(new List<Node>() { projectileInPlayerDirectionNode, chaseBonusNode, chaseSequence, shootNode });
 
             myBehaviorTree.start = topSelector;
         }
@@ -78,6 +73,7 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.myPlayerPosition] = myPlayerInfo.Transform.Position;
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.myPlayerId] = myPlayerInfo.PlayerId;
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.playerRotation] = Vector3.right;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.bonusTarget] = null;
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.target] = null;
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.targetPosition] = null;
             myBehaviorTree.data.Blackboard[(int)BlackboardEnum.targetIsEnemy] = false;
