@@ -8,9 +8,8 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Sequence(List<Node> children) : base(children) { }
 
-        public override State Evaluate()
+        public override State privateEvaluate()
         {
-            UnityEngine.Debug.LogError("sequence");
             foreach (Node child in children)
             {
                 switch (child.Evaluate())

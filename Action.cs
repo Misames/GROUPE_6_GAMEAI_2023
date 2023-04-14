@@ -10,7 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del DoAction;
 
-        public Action() { }
+        public Action() : base(){ }
 
         public void AssignAction(Del actionFunction)
         {
@@ -19,8 +19,6 @@ namespace AI_BehaviorTree_AIImplementation
 
         public State ActionShoot()
         {
-            //UnityEngine.Debug.LogError("Shoot");
-
             Data data = BehaviourTree.Instance().data;
             Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
 
@@ -31,19 +29,18 @@ namespace AI_BehaviorTree_AIImplementation
             actionLookAt.Position = target;
             BehaviourTree.Instance().computeAction.Add(actionLookAt);
             BehaviourTree.Instance().computeAction.Add(new AIActionFire());
+
             return State.SUCCESS;
         }
 
         public State ActionFindTarget()
         {
-            //UnityEngine.Debug.LogError("FindTarget");
             Data data = BehaviourTree.Instance().data;
             List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
 
             PlayerInformations target = null;
 
             float minDistance = 100000;
-
 
             foreach (PlayerInformations playerInfo in playerInfos)
             {
@@ -57,23 +54,23 @@ namespace AI_BehaviorTree_AIImplementation
                     }
                 }
             }
+
             if (target == null)
                 return State.FAILURE;
+
             data.Blackboard[BlackboardVariable.targetPosition] = target.Transform.Position;
             return State.SUCCESS;
         }
 
         public State ActionMoveToTarget()
         {
-            //UnityEngine.Debug.LogError("MoveToTarget");
-
             Data data = BehaviourTree.Instance().data;
 
             Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
             if (target == null)
                 return State.FAILURE;
-            float distance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], target);
 
+            float distance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], target);
             if (distance < 1)
                 return State.SUCCESS;
 
@@ -82,7 +79,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.RUNNING;
         }
 
-        public override State Evaluate()
+        public override State privateEvaluate()
         {
             state = DoAction();
             if (state == State.RUNNING)
@@ -100,6 +97,8 @@ namespace AI_BehaviorTree_AIImplementation
                         case State.RUNNING:
                             state = State.RUNNING;
                             return State.RUNNING;
+                        default:
+                            continue;
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Selector(List<Node> children) : base(children) { }
 
-        public override State Evaluate()
+        public override State privateEvaluate()
         {
             //UnityEngine.Debug.LogError("selector");
             foreach (Node child in children)
@@ -27,7 +27,6 @@ namespace AI_BehaviorTree_AIImplementation
                         continue;
                 }
             }
-
             state = State.FAILURE;
             return state;
         }

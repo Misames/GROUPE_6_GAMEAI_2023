@@ -9,6 +9,7 @@ namespace AI_BehaviorTree_AIImplementation
         public Dictionary<BlackboardVariable, object> Blackboard;
         public GameWorldUtils GameWorld;
     }
+
     public enum BlackboardVariable
     {
         myPlayerPosition,
@@ -17,21 +18,21 @@ namespace AI_BehaviorTree_AIImplementation
         targetIsEnemy,
         enemyProximityLimit
     }
+
     class BehaviourTree
     {
         public Node start;
         public Data data;
         public List<AIAction> computeAction;
-        public static BehaviourTree Instance() { Assert.IsNotNull(_instance);return _instance; }
-        private static BehaviourTree _instance;
+        public static BehaviourTree Instance() { Assert.IsNotNull(instance); return instance; }
+        private static BehaviourTree instance;
 
         public BehaviourTree()
         {
-            BehaviourTree._instance = this;
+            instance = this;
             start = new Node();
             data = new Data();
             computeAction = new List<AIAction>();
-
             data.Blackboard = new Dictionary<BlackboardVariable, object>();
             data.GameWorld = null;
         }
@@ -46,30 +47,6 @@ namespace AI_BehaviorTree_AIImplementation
         public void UpdateGameWorldData(GameWorldUtils currentGameWorld)
         {
             data.GameWorld = currentGameWorld;
-        }
-
-        public Selector AddSelector()
-        {
-            Selector newSlector = new Selector();
-            return newSlector;
-        }
-
-        public Sequence AddSequence()
-        {
-            Sequence newSquence = new Sequence();
-            return newSquence;
-        }
-
-        public Action AddAction()
-        {
-            Action newAction = new Action();
-            return newAction;
-        }
-
-        public Condition AddCondition()
-        {
-            Condition newCondition = new Condition();
-            return newCondition;
         }
     }
 }
