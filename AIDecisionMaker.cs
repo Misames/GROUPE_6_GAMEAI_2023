@@ -4,6 +4,7 @@ using AI_BehaviorTree_AIGameUtility;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+
 namespace AI_BehaviorTree_AIImplementation
 {
     public class AIDecisionMaker
@@ -20,6 +21,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         List<Enemy> enemiesList;
         Enemy[] enemiesArray;
+        private Enemy myEnemy;
 
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
         public void SetAIId(int parAIId) { AIId = parAIId; }
@@ -44,42 +46,76 @@ namespace AI_BehaviorTree_AIImplementation
             List<AIAction> actionList = new List<AIAction>();
 
             Enemy target = null;
+            List<Enemy> possibleTargets = new List<Enemy>();
             for (int i = 0; i < enemiesList.Count; i++)
             {
                 if (enemiesList[i].IsActive && enemiesList[i].EnemyId != AIId)
-                    target = enemiesList[i];
+                    possibleTargets.Add(enemiesList[i]);
             }
 
-            if (target == null)
-                return actionList;
+            if (possibleTargets.Count == 0)
+                return actionList;  // Pas de cible, on retourne une liste vide 
+
+            Enemy chosenTarget = FindNearestActiveEnemy(possibleTargets);
 
             Enemy myEnemy = GetEnemyInfos(AIId, enemiesArray);
             if (myEnemy == null)
                 return actionList;
 
-            if (Vector3.Distance(myEnemy.transform.position, target.transform.position) <= BestDistanceToFire)
+            // Vérification des conditions pour atteindre et tirer sur la cible 
+            if (Vector3.Distance(myEnemy.transform.transform.position, chosenTarget.transform.transform.position) < BestDistanceToFire)
             {
+                // Déplacement vers la cible 
                 AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
-                actionMove.Position = myEnemy.transform.position;
+                actionMove.Position = chosenTarget.transform.transform.position;
                 actionList.Add(actionMove);
+
+                // Orientation vers la cible 
+                AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
+                actionLookAt.Position = chosenTarget.transform.transform.position;
+                actionList.Add(actionLookAt);
+
+                // Tir sur la cible atteinte 
+                actionList.Add(new AIActionFire());
             }
             else
             {
+                // Stop si la cible n'est pas à portée 
                 AIActionStopMovement actionStop = new AIActionStopMovement();
                 actionList.Add(actionStop);
             }
 
-            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
-            actionLookAt.Position = target.transform.position;
-            actionList.Add(actionLookAt);
-            actionList.Add(new AIActionFire());
-
             return actionList;
+        }
+
+        private Enemy FindNearestActiveEnemy(List<Enemy> enemies)
+        {
+            myEnemy= GetEnemyInfos(AIId, enemiesArray);
+            Enemy nearestEnemy = enemies[0];
+            float nearestDistance = Vector3.Distance(myEnemy.transform.transform.position,nearestEnemy.transform.transform.position);
+
+            for (int i = 1; i < enemies.Count; i++)
+            {
+                float distanceToEnemy = Vector3.Distance(myEnemy.transform.transform.position,enemies[i].transform.transform.position);
+
+                if (distanceToEnemy < nearestDistance && enemies[i].IsActive)
+                {
+                    nearestDistance = distanceToEnemy;
+                    nearestEnemy = enemies[i];
+                }
+            }
+
+            return nearestEnemy;
         }
 
         private Enemy GetEnemyInfos(int aIId, Enemy[] enemiesArray)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < enemiesArray.Length; i++)
+            {
+                if (enemiesArray[i].EnemyId == aIId)
+                    return enemiesArray[i];
+            }
+            return null;
         }
 
         private void UpdateBlackboard()

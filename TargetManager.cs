@@ -48,7 +48,8 @@ class TargetManager
 
     public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)
     {
-        //mise à jour des données du jeu actuel
+        // Met à jour les données du monde de jeu 
+        currentGameWorld.GetPlayerInfosList();
     }
 
     public void TrackTargetMovement(object v1, object v, Transform targetTransform)
@@ -68,20 +69,15 @@ class TargetManager
         return pos;
     }
 
-    internal void TrackTargetMovement(object v, Enemy target, Vector3 predictedPos)
-    {
-        throw new NotImplementedException();
-    }
-
     internal void UpdateTargetPosition(Enemy target, Vector3 predictedPos)
     {
-        throw new NotImplementedException();
+        target.transform.transform.position = predictedPos;
     }
 }
 static class TargetManagerExtensions
 {
     public static void UpdateGameWorldData(this TargetManager targetManager, ref GameWorldUtils currentGameWorld)
     {
-        // Mise à jour des données de l'environnement de jeu actuel
+        targetManager.UpdateGameWorldData(ref currentGameWorld);
     }
 }
