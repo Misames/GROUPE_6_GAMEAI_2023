@@ -116,7 +116,12 @@ namespace AI_BehaviorTree_AIImplementation
 
         internal void UpdateGameWorldData(ref List<Enemy> enemiesList)
         {
-            throw new NotImplementedException();
+            if (enemiesList != null && data.GameWorld != null)
+            {
+                data.GameWorld = data.GameWorld;
+                targetManager.UpdateGameWorldData(ref data.GameWorld);
+            }
+        
         }
     }
 }

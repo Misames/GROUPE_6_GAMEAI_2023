@@ -47,6 +47,7 @@ namespace AI_BehaviorTree_AIImplementation
 
             Enemy target = null;
             List<Enemy> possibleTargets = new List<Enemy>();
+
             for (int i = 0; i < enemiesList.Count; i++)
             {
                 if (enemiesList[i].IsActive && enemiesList[i].EnemyId != AIId)
