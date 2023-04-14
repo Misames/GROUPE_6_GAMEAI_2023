@@ -4,20 +4,12 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class Sequence : Node
     {
-        public Sequence() : base()
-        {
-            nodeType = NodeType.SEQUENCE;
-        }
+        public Sequence() : base() { }
 
-        public Sequence(List<Node> children) : base(children)
-        {
-            nodeType = NodeType.SEQUENCE;
-        }
+        public Sequence(List<Node> children) : base(children) { }
 
         public override State Evaluate()
         {
-            UnityEngine.Debug.LogError("sequence");
-
             foreach (Node child in children)
             {
                 switch (child.Evaluate())
@@ -36,7 +28,6 @@ namespace AI_BehaviorTree_AIImplementation
                         return state;
                 }
             }
-
             return state;
         }
     }

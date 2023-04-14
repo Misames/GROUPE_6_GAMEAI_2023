@@ -10,16 +10,6 @@ namespace AI_BehaviorTree_AIImplementation
         SUCCESS,
     }
 
-    public enum NodeType
-    {
-        NODE,
-        START,
-        SELECTOR,
-        SEQUENCE,
-        CONDITION,
-        ACTION
-    }
-
     public struct Data
     {
         public Dictionary<string, object> Blackboard;
@@ -28,43 +18,14 @@ namespace AI_BehaviorTree_AIImplementation
 
     public class Node
     {
-        private static uint nbNode;
-
-        protected NodeType nodeType;
         protected Data data;
-
         protected State state;
         protected Node parent;
         protected List<Node> children = new List<Node>();
 
-        ~Node()
-        {
-            nbNode -= 1;
-        }
-
         public Node()
         {
-            nbNode += 1;
-            nodeType = NodeType.NODE;
             parent = null;
-        }
-
-        public Node(NodeType nType)
-        {
-            nbNode += 1;
-            this.nodeType = nType;
-        }
-
-        public Node(Node parent)
-        {
-            nodeType = NodeType.NODE;
-            this.parent = parent;
-        }
-
-        public Node(NodeType nType, Node parent)
-        {
-            this.nodeType = nType;
-            this.parent = parent;
         }
 
         public Node(List<Node> children)
@@ -93,47 +54,12 @@ namespace AI_BehaviorTree_AIImplementation
             data = parentData;
         }
 
-        protected static State CastEvaluate(Node node)
-        {
-            State childState;
-
-            switch (node.nodeType)
-            {
-                case NodeType.SELECTOR:
-                    Selector tempSelector = (Selector)node;
-                    childState = tempSelector.Evaluate();
-                    break;
-
-                case NodeType.SEQUENCE:
-                    Sequence tempSequence = (Sequence)node;
-                    childState = tempSequence.Evaluate();
-                    break;
-
-                case NodeType.CONDITION:
-                    Condition tempCondition = (Condition)node;
-                    childState = tempCondition.Evaluate();
-                    break;
-
-                case NodeType.ACTION:
-                    Action tempAction = (Action)node;
-                    childState = tempAction.Evaluate();
-                    break;
-
-                default:
-                    childState = node.Evaluate();
-                    break;
-            }
-            return childState;
-        }
-
-
         /// <summary>
         /// Permet de tester l'état du Node <br />
         /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
         /// </summary>
         public virtual State Evaluate()
         {
-            UnityEngine.Debug.LogError("node");
             foreach (Node child in children)
             {   
                 switch (child.Evaluate())

@@ -6,10 +6,7 @@
 
         public Del DoAction;
 
-        public Action()
-        {
-            nodeType = NodeType.ACTION;
-        }
+        public Action() { }
 
         public void AssignAction(Del actionFunction)
         {
@@ -25,7 +22,6 @@
         public override State Evaluate()
         {
             state = DoAction();
-
             if (state == State.RUNNING)
             {
                 foreach (Node child in children)
@@ -44,7 +40,6 @@
                     }
                 }
             }
-
             return state;
         }
     }
