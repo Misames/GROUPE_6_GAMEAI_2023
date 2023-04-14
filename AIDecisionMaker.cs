@@ -19,8 +19,7 @@ namespace AI_BehaviorTree_AIImplementation
         private int AIId = -1;
         public GameWorldUtils AIGameWorldUtils = new GameWorldUtils();
 
-        List<Enemy> enemiesList;
-        Enemy[] enemiesArray;
+        List<Enemy> enemiesList = new List<Enemy>();
         private Enemy myEnemy;
 
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
@@ -38,6 +37,7 @@ namespace AI_BehaviorTree_AIImplementation
         //Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
 
         private float BestDistanceToFire = 10.0f;
+        private object ActiveEnemiesArray;
 
         public List<AIAction> ComputeAIDecision()
         {
@@ -59,7 +59,7 @@ namespace AI_BehaviorTree_AIImplementation
 
             Enemy chosenTarget = FindNearestActiveEnemy(possibleTargets);
 
-            Enemy myEnemy = GetEnemyInfos(AIId, enemiesArray);
+            Enemy myEnemy = GetEnemyInfos(AIId, ActiveEnemiesArray);
             if (myEnemy == null)
                 return actionList;
 
@@ -91,7 +91,8 @@ namespace AI_BehaviorTree_AIImplementation
 
         private Enemy FindNearestActiveEnemy(List<Enemy> enemies)
         {
-            myEnemy= GetEnemyInfos(AIId, enemiesArray);
+            object ActiveEnemiesArray = null;
+            myEnemy = GetEnemyInfos(AIId, ActiveEnemiesArray);
             Enemy nearestEnemy = enemies[0];
             float nearestDistance = Vector3.Distance(myEnemy.transform.transform.position,nearestEnemy.transform.transform.position);
 
@@ -107,6 +108,13 @@ namespace AI_BehaviorTree_AIImplementation
             }
 
             return nearestEnemy;
+        }
+
+        private Enemy GetEnemyInfos(int aIId, object activeEnemiesArray)
+        {
+            //get enemy infos
+            Enemy enemy = null;
+            return enemy;
         }
 
         private Enemy GetEnemyInfos(int aIId, Enemy[] enemiesArray)
@@ -131,7 +139,7 @@ namespace AI_BehaviorTree_AIImplementation
             Enemy[] enemies = new Enemy[AIId];
             myBehaviorTree.data.Blackboard["chosenTarget"] = enemies[0];
             myBehaviorTree.data.Blackboard["enemiesList"] = enemiesList;
-            myBehaviorTree.data.Blackboard["enemiesArray"] = enemiesArray;
+
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
@@ -145,5 +153,19 @@ namespace AI_BehaviorTree_AIImplementation
             Assert.IsTrue(false, "GetPlayerInfos : PlayerId not Found");
             return null;
         }
+   
+        private void SetEnemiesList(List<Enemy> enemies)
+        {
+            enemiesList = enemies;
+        }
+
+        private void SetEnemiesArray(Enemy[] enemies)
+        {
+            Enemy[] enemiesArray = enemies;
+        }
+
+
     }
+
+   
 }
