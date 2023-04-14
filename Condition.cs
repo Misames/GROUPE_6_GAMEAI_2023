@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AI_BehaviorTree_AIGameUtility;
+using UnityEngine;
 
 namespace AI_BehaviorTree_AIImplementation
 {
@@ -9,7 +10,10 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del EvaluateCondition;
 
-        public Condition() { }
+        public Condition()
+        {
+            nodeType = NodeType.CONDITION;
+        }
 
         public void AssignCondition(Del conditionFunction)
         {
@@ -18,23 +22,53 @@ namespace AI_BehaviorTree_AIImplementation
 
         public State CloseToEnemyTarget()
         {
+            Data data = BehaviourTree.Instance().data;
             List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
             PlayerInformations target = null;
             foreach (PlayerInformations playerInfo in playerInfos) { }
             // test close to target using blackboard
-            if ((bool)data.Blackboard[(int)BlackboardEnum.targetIsEnemy] == true) { }
+            if ((bool)data.Blackboard[BlackboardVariable.targetIsEnemy] == true) { }
             return State.SUCCESS;
         }
 
-        public override State Evaluate(Data data)
+        public State EnemyInSight()
         {
+            Data data = BehaviourTree.Instance().data;
+            //UnityEngine.Debug.LogError("enemyInSight");
+            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
+            Vector3 myPlayerPos = (Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition];
+
+            PlayerInformations target = null;
+            
+            foreach (PlayerInformations playerInfo in playerInfos)
+            {
+                if (playerInfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
+                {
+                    RaycastHit[] hits = Physics.RaycastAll(myPlayerPos, playerInfo.Transform.Position, 100f);
+
+                    //UnityEngine.Debug.LogError("hit:" + playerInfo.PlayerId);
+                    
+                    foreach (RaycastHit hit in hits)
+                    {
+                        //UnityEngine.Debug.LogError(hit.collider.gameObject.name);
+                    }
+
+                }
+            }
+            return State.SUCCESS;
+        }
+
+        public override State Evaluate()
+        {
+            //UnityEngine.Debug.LogError("condition");
+
             state = EvaluateCondition();
 
             if (state == State.SUCCESS)
             {
                 foreach (Node child in children)
                 {
-                    switch (child.Evaluate(data))
+                    switch (child.Evaluate())
                     {
                         case State.FAILURE:
                             state = State.FAILURE;

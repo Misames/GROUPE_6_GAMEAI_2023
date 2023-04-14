@@ -4,33 +4,38 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class Sequence : Node
     {
-        public Sequence() : base() { }
-
-        public Sequence(List<Node> children) : base(children) { }
-
-        public override State Evaluate(Data data)
+        public Sequence() : base()
         {
-            bool anyChildIsRunning = false;
+            nodeType = NodeType.SEQUENCE;
+        }
 
-            foreach (Node node in children)
+        public Sequence(List<Node> children) : base(children)
+        {
+            nodeType = NodeType.SEQUENCE;
+        }
+
+        public override State Evaluate()
+        {
+            UnityEngine.Debug.LogError("sequence");
+            foreach (Node child in children)
             {
-                switch (node.Evaluate(data))
+                switch (child.Evaluate())
                 {
                     case State.FAILURE:
                         state = State.FAILURE;
                         return state;
                     case State.SUCCESS:
+                        state = State.SUCCESS;
                         continue;
                     case State.RUNNING:
-                        anyChildIsRunning = true;
-                        continue;
+                        state = State.RUNNING;
+                        break;
                     default:
                         state = State.SUCCESS;
                         return state;
                 }
             }
 
-            state = anyChildIsRunning ? State.RUNNING : State.SUCCESS;
             return state;
         }
     }

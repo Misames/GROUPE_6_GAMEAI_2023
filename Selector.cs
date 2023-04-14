@@ -4,15 +4,22 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class Selector : Node
     {
-        public Selector() : base() { }
-
-        public Selector(List<Node> children) : base(children) { }
-
-        public override State Evaluate(Data data)
+        public Selector() : base()
         {
-            foreach (Node node in children)
+            nodeType = NodeType.SELECTOR;
+        }
+
+        public Selector(List<Node> children) : base(children)
+        {
+            nodeType = NodeType.SELECTOR;
+        }
+
+        public override State Evaluate()
+        {
+            //UnityEngine.Debug.LogError("selector");
+            foreach (Node child in children)
             {
-                switch (node.Evaluate(data))
+                switch (child.Evaluate())
                 {
                     case State.FAILURE:
                         continue;
