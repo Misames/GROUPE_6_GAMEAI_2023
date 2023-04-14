@@ -11,7 +11,7 @@ namespace AI_BehaviorTree_AIImplementation
         private BehaviourTree myBehaviorTree = new BehaviourTree();
 
         // Debug values
-        const int debug_mode = 2;
+        const int debug_mode = 0;
         DateTime timer = new DateTime();
         /// <summary>
         /// Ne pas supprimer des fonctions, ou changer leur signature sinon la DLL ne fonctionnera plus
@@ -58,11 +58,11 @@ namespace AI_BehaviorTree_AIImplementation
                 timer = DateTime.Now;
             }
 
-            myBehaviorTree.UpdateGameWorldData(AIGameWorldUtils);
+            BehaviourTree.Instance().UpdateGameWorldData(AIGameWorldUtils);
 
             List<AIAction> actionList = new List<AIAction>();
 
-            myBehaviorTree.Compute();
+            actionList = myBehaviorTree.Compute();
             /*
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
 
@@ -113,40 +113,54 @@ namespace AI_BehaviorTree_AIImplementation
 
         private void InitializeBehaviorTree()
         {
-            myBehaviorTree.data.Blackboard.Add("myPlayerPosition", null);
-            myBehaviorTree.data.Blackboard.Add("myPlayerId", null);
-            myBehaviorTree.data.Blackboard.Add("targetPosition", null);
-            myBehaviorTree.data.Blackboard.Add("targetIsEnemy", false);
-            myBehaviorTree.data.Blackboard.Add("enemyProximityLimit", 10);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.myPlayerPosition, null);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.myPlayerId, null);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetPosition, null);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetIsEnemy, false);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.enemyProximityLimit, 10);
 
             // Creation statique d'un Behaviour tree
             // en 2 étapes : 1 ajouter les nodes 2 les liers
 
             // creation des nodes
-            Selector selector_0 = myBehaviorTree.AddSelector();
-            Condition condition_0 = myBehaviorTree.AddCondition();
-            //Action action_0 = myBehaviorTree.AddAction();
+            Selector selectorStart = myBehaviorTree.AddSelector();
+            Sequence sequenceCombat = myBehaviorTree.AddSequence();
+            //Condition conditionEnemyInSight = myBehaviorTree.AddCondition();
+            Action actionFindTarget = myBehaviorTree.AddAction();
+            Action actionShoot = myBehaviorTree.AddAction();
+            Action actionMoveToTarget = myBehaviorTree.AddAction();
 
-            condition_0.AssignCondition(condition_0.EnemyInSight);
 
-            selector_0.Attach(condition_0);
-            myBehaviorTree.start.Attach(selector_0);
+            //conditionEnemyInSight.AssignCondition(conditionEnemyInSight.EnemyInSight);
+            actionFindTarget.AssignAction(actionFindTarget.ActionFindTarget);
+            actionShoot.AssignAction(actionShoot.ActionShoot);
+            actionMoveToTarget.AssignAction(actionMoveToTarget.ActionMoveToTarget);
+
+            sequenceCombat.Attach(actionFindTarget);
+            sequenceCombat.Attach(actionShoot);
+            sequenceCombat.Attach(actionMoveToTarget);
+
+            //selectorStart.Attach(conditionEnemyInSight);
+            selectorStart.Attach(sequenceCombat);
+
+            myBehaviorTree.start.Attach(selectorStart);
+
 
             //action_0.AssignAction();
             
 
-            UnityEngine.Debug.LogError("arbre fini ! UwU");
+            //UnityEngine.Debug.LogError("arbre fini ! UwU");
         }
 
         private void UpdateBlackboard()
         {
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
             PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
-            myBehaviorTree.data.Blackboard["myPlayerPosition"] = myPlayerInfo.Transform.Position;
-            myBehaviorTree.data.Blackboard["myPlayerId"] = myPlayerInfo.PlayerId;
-            myBehaviorTree.data.Blackboard["targetPosition"] = null;
-            myBehaviorTree.data.Blackboard["targetIsEnemy"] = false;
-            myBehaviorTree.data.Blackboard["enemyProximityLimit"] = 10;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.myPlayerPosition] = myPlayerInfo.Transform.Position;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.myPlayerId] = myPlayerInfo.PlayerId;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.targetPosition] = null;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.targetIsEnemy] = false;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.enemyProximityLimit] = 10;
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)

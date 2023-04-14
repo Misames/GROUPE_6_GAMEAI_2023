@@ -1,25 +1,46 @@
 ﻿using System.Collections.Generic;
 using AI_BehaviorTree_AIGameUtility;
+using UnityEngine.Assertions;
 
 namespace AI_BehaviorTree_AIImplementation
 {
+    public struct Data
+    {
+        public Dictionary<BlackboardVariable, object> Blackboard;
+        public GameWorldUtils GameWorld;
+    }
+    public enum BlackboardVariable
+    {
+        myPlayerPosition,
+        myPlayerId,
+        targetPosition,
+        targetIsEnemy,
+        enemyProximityLimit
+    }
     class BehaviourTree
     {
         public Node start;
         public Data data;
+        public List<AIAction> computeAction;
+        public static BehaviourTree Instance() { Assert.IsNotNull(_instance);return _instance; }
+        private static BehaviourTree _instance;
 
         public BehaviourTree()
         {
+            BehaviourTree._instance = this;
             start = new Node();
             data = new Data();
-            data.Blackboard = new Dictionary<string, object>();
+            computeAction = new List<AIAction>();
+
+            data.Blackboard = new Dictionary<BlackboardVariable, object>();
             data.GameWorld = null;
-            start.AssignData(ref data);
         }
 
-        public void Compute()
+        public List<AIAction> Compute()
         {
+            computeAction.Clear();
             start.Evaluate();
+            return computeAction;
         }
 
         public void UpdateGameWorldData(GameWorldUtils currentGameWorld)
@@ -30,28 +51,24 @@ namespace AI_BehaviorTree_AIImplementation
         public Selector AddSelector()
         {
             Selector newSlector = new Selector();
-            newSlector.AssignData(ref data);
             return newSlector;
         }
 
         public Sequence AddSequence()
         {
             Sequence newSquence = new Sequence();
-            newSquence.AssignData(ref data);
             return newSquence;
         }
 
         public Action AddAction()
         {
             Action newAction = new Action();
-            newAction.AssignData(ref data);
             return newAction;
         }
 
         public Condition AddCondition()
         {
             Condition newCondition = new Condition();
-            newCondition.AssignData(ref data);
             return newCondition;
         }
     }

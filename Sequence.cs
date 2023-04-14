@@ -17,7 +17,6 @@ namespace AI_BehaviorTree_AIImplementation
         public override State Evaluate()
         {
             UnityEngine.Debug.LogError("sequence");
-
             foreach (Node child in children)
             {
                 switch (child.Evaluate())

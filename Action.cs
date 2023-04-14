@@ -1,4 +1,8 @@
-﻿namespace AI_BehaviorTree_AIImplementation
+﻿using AI_BehaviorTree_AIGameUtility;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace AI_BehaviorTree_AIImplementation
 {
     public class Action : Node
     {
@@ -16,10 +20,69 @@
             DoAction = actionFunction;
         }
 
-        public State ActionCombat()
+        public State ActionShoot()
         {
-            // test close to target using blackboard
+            //UnityEngine.Debug.LogError("Shoot");
+
+            Data data = BehaviourTree.Instance().data;
+            Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
+
+            if (target == null)
+                return State.FAILURE;
+
+            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
+            actionLookAt.Position = target;
+            BehaviourTree.Instance().computeAction.Add(actionLookAt);
+            BehaviourTree.Instance().computeAction.Add(new AIActionFire());
             return State.SUCCESS;
+        }
+
+        public State ActionFindTarget()
+        {
+            //UnityEngine.Debug.LogError("FindTarget");
+            Data data = BehaviourTree.Instance().data;
+            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
+
+            PlayerInformations target = null;
+
+            float minDistance = 100000;
+
+
+            foreach (PlayerInformations playerInfo in playerInfos)
+            {
+                if (playerInfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
+                {
+                    float distance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], playerInfo.Transform.Position);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        target = playerInfo;
+                    }
+                }
+            }
+            if (target == null)
+                return State.FAILURE;
+            data.Blackboard[BlackboardVariable.targetPosition] = target.Transform.Position;
+            return State.SUCCESS;
+        }
+
+        public State ActionMoveToTarget()
+        {
+            //UnityEngine.Debug.LogError("MoveToTarget");
+
+            Data data = BehaviourTree.Instance().data;
+
+            Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
+            if (target == null)
+                return State.FAILURE;
+            float distance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], target);
+
+            if (distance < 1)
+                return State.SUCCESS;
+
+            AIActionMoveToDestination newAction = new AIActionMoveToDestination(target);
+            BehaviourTree.Instance().computeAction.Add(newAction);
+            return State.RUNNING;
         }
 
         public override State Evaluate()

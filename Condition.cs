@@ -22,29 +22,31 @@ namespace AI_BehaviorTree_AIImplementation
 
         public State CloseToEnemyTarget()
         {
+            Data data = BehaviourTree.Instance().data;
             List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
             PlayerInformations target = null;
             foreach (PlayerInformations playerInfo in playerInfos) { }
             // test close to target using blackboard
-            if ((bool)data.Blackboard["targetIsEnemy"] == true) { }
+            if ((bool)data.Blackboard[BlackboardVariable.targetIsEnemy] == true) { }
             return State.SUCCESS;
         }
 
         public State EnemyInSight()
         {
-            UnityEngine.Debug.LogError("enemyInSight");
+            Data data = BehaviourTree.Instance().data;
+            //UnityEngine.Debug.LogError("enemyInSight");
             List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
-            //Vector3 myPlayerPos = (Vector3)data.Blackboard["myPlayerPosition"];
+            Vector3 myPlayerPos = (Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition];
 
             PlayerInformations target = null;
-            /*
+            
             foreach (PlayerInformations playerInfo in playerInfos)
             {
-                if (playerInfo.PlayerId != (int)data.Blackboard["myPlayerId"])
+                if (playerInfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
                 {
                     RaycastHit[] hits = Physics.RaycastAll(myPlayerPos, playerInfo.Transform.Position, 100f);
 
-                    UnityEngine.Debug.LogError("hit:" + playerInfo.PlayerId);
+                    //UnityEngine.Debug.LogError("hit:" + playerInfo.PlayerId);
                     
                     foreach (RaycastHit hit in hits)
                     {
@@ -52,13 +54,13 @@ namespace AI_BehaviorTree_AIImplementation
                     }
 
                 }
-            }*/
+            }
             return State.SUCCESS;
         }
 
         public override State Evaluate()
         {
-            UnityEngine.Debug.LogError("condition");
+            //UnityEngine.Debug.LogError("condition");
 
             state = EvaluateCondition();
 

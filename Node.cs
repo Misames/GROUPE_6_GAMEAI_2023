@@ -20,18 +20,11 @@ namespace AI_BehaviorTree_AIImplementation
         ACTION
     }
 
-    public struct Data
-    {
-        public Dictionary<string, object> Blackboard;
-        public GameWorldUtils GameWorld;
-    }
-
     public class Node
     {
         private static uint nbNode;
 
         protected NodeType nodeType;
-        protected Data data;
 
         protected State state;
         protected Node parent;
@@ -81,17 +74,7 @@ namespace AI_BehaviorTree_AIImplementation
         {
             childNode.parent = this;
             children.Add(childNode);
-            childNode.AssignData(ref data);
-        }
-
-        /// <summary>
-        /// Permet de donner un acces aux données du world
-        /// </summary>
-        /// <param name="parentData"></param>
-        public void AssignData(ref Data parentData)
-        {
-            data = parentData;
-        }
+        }       
 
         protected static State CastEvaluate(Node node)
         {
@@ -133,7 +116,7 @@ namespace AI_BehaviorTree_AIImplementation
         /// </summary>
         public virtual State Evaluate()
         {
-            UnityEngine.Debug.LogError("node");
+            //UnityEngine.Debug.LogError("node");
             foreach (Node child in children)
             {   
                 switch (child.Evaluate())
