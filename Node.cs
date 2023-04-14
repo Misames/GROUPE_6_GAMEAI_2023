@@ -14,6 +14,8 @@ namespace AI_BehaviorTree_AIImplementation
     {
         myPlayerPosition,
         myPlayerId,
+        playerRotation,
+        target,
         targetPosition,
         targetIsEnemy,
         enemyProximityLimit,
