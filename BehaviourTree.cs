@@ -113,5 +113,10 @@ namespace AI_BehaviorTree_AIImplementation
         {
             return (Enemy)data.Blackboard["chosenTarget"];
         }
+
+        internal void UpdateGameWorldData(ref List<Enemy> enemiesList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

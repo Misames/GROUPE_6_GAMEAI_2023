@@ -8,6 +8,8 @@ class Enemy
     public float closingSpeed;
     public float speed;
     internal GameObject transform;
+    internal bool IsActive;
+    internal int EnemyId;
 }
 
 static class EnemyArrayExtensions
@@ -26,7 +28,14 @@ class TargetManager
     public Enemy ChooseTarget(Enemy[] enemies)
     {
         // Parcours la liste des ennemis et choisis le meilleur 
-        chosenTarget = enemies[1];
+        if (enemies.Length > 0)
+        {
+            chosenTarget = enemies[enemies.Length - 1];
+        }
+        else
+        {
+            // enemies est vide, on ne choisit pas de cible
+        }
         for (int i = 1; i < enemies.Length; i++)
         {
             if (enemies[i].closingSpeed > chosenTarget.closingSpeed)

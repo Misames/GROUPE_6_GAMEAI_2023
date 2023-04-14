@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AI_BehaviorTree_AIGameUtility;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,6 +17,9 @@ namespace AI_BehaviorTree_AIImplementation
         /// </summary>
         private int AIId = -1;
         public GameWorldUtils AIGameWorldUtils = new GameWorldUtils();
+
+        List<Enemy> enemiesList;
+        Enemy[] enemiesArray;
 
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
         public void SetAIId(int parAIId) { AIId = parAIId; }
@@ -35,50 +39,47 @@ namespace AI_BehaviorTree_AIImplementation
 
         public List<AIAction> ComputeAIDecision()
         {
-            myBehaviorTree.UpdateGameWorldData(ref AIGameWorldUtils);
+            myBehaviorTree.UpdateGameWorldData(ref enemiesList);
 
             List<AIAction> actionList = new List<AIAction>();
 
-            List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
-
-            PlayerInformations target = null;
-            foreach (PlayerInformations playerInfo in playerInfos)
+            Enemy target = null;
+            for (int i = 0; i < enemiesList.Count; i++)
             {
-                if (!playerInfo.IsActive)
-                    continue;
-
-                if (playerInfo.PlayerId == AIId)
-                    continue;
-
-                target = playerInfo;
-                break;
+                if (enemiesList[i].IsActive && enemiesList[i].EnemyId != AIId)
+                    target = enemiesList[i];
             }
 
             if (target == null)
                 return actionList;
 
-            PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
-            if (myPlayerInfo == null)
+            Enemy myEnemy = GetEnemyInfos(AIId, enemiesArray);
+            if (myEnemy == null)
                 return actionList;
 
-            if (Vector3.Distance(myPlayerInfo.Transform.Position, target.Transform.Position) < BestDistanceToFire)
+            if (Vector3.Distance(myEnemy.transform.position, target.transform.position) <= BestDistanceToFire)
+            {
+                AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
+                actionMove.Position = myEnemy.transform.position;
+                actionList.Add(actionMove);
+            }
+            else
             {
                 AIActionStopMovement actionStop = new AIActionStopMovement();
                 actionList.Add(actionStop);
             }
-            else
-            {
-                AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
-                actionMove.Position = target.Transform.Position;
-                actionList.Add(actionMove);
-            }
 
             AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
-            actionLookAt.Position = target.Transform.Position;
+            actionLookAt.Position = target.transform.position;
             actionList.Add(actionLookAt);
             actionList.Add(new AIActionFire());
 
             return actionList;
+        }
+
+        private Enemy GetEnemyInfos(int aIId, Enemy[] enemiesArray)
+        {
+            throw new NotImplementedException();
         }
 
         private void UpdateBlackboard()
@@ -92,6 +93,8 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard["enemyProximityLimit"] = 10;
             Enemy[] enemies = new Enemy[AIId];
             myBehaviorTree.data.Blackboard["chosenTarget"] = enemies[0];
+            myBehaviorTree.data.Blackboard["enemiesList"] = enemiesList;
+            myBehaviorTree.data.Blackboard["enemiesArray"] = enemiesArray;
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
