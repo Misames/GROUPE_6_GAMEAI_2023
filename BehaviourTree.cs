@@ -12,16 +12,17 @@ namespace AI_BehaviorTree_AIImplementation
         {
             start = new Node();
             data = new Data();
-            data.Blackboard = new Dictionary<string, object>();
+            data.Blackboard = new List<object>();
             data.GameWorld = null;
             start.AssignData(ref data);
-            data.Blackboard.Add("myPlayerPosition", null);
-            data.Blackboard.Add("myPlayerId", null);
-            data.Blackboard.Add("targetPosition", null);
-            data.Blackboard.Add("targetIsEnemy", false);
-            data.Blackboard.Add("enemyProximityLimit", 10);
+            data.Blackboard.Add(null); // Player Position
+            data.Blackboard.Add(null); //Player ID
+            data.Blackboard.Add(null); // Target position
+            data.Blackboard.Add(false); // target is enemy
+            data.Blackboard.Add(10); // enemy proximity limit
+            data.Blackboard.Add(new List<AIAction>()); // action list
 
-            InitSimpleTree();
+            //InitSimpleTree();
         }
 
         public void UpdateGameWorldData(ref GameWorldUtils currentGameWorld)

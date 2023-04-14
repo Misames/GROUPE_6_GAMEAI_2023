@@ -35,7 +35,11 @@ namespace AI_BehaviorTree_AIImplementation
 
         public List<AIAction> ComputeAIDecision()
         {
+            InitializeBehaviorTree();
+
             myBehaviorTree.UpdateGameWorldData(ref AIGameWorldUtils);
+
+            UpdateBlackboard();
 
             List<AIAction> actionList = new List<AIAction>();
 
@@ -61,17 +65,9 @@ namespace AI_BehaviorTree_AIImplementation
             if (myPlayerInfo == null)
                 return actionList;
 
-            if (Vector3.Distance(myPlayerInfo.Transform.Position, target.Transform.Position) < BestDistanceToFire)
-            {
-                AIActionStopMovement actionStop = new AIActionStopMovement();
-                actionList.Add(actionStop);
-            }
-            else
-            {
-                AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
-                actionMove.Position = target.Transform.Position;
-                actionList.Add(actionMove);
-            }
+            myBehaviorTree.start.Evaluate(myBehaviorTree.data);
+
+            actionList = (List<AIAction>)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList];
 
             AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
             actionLookAt.Position = target.Transform.Position;
@@ -81,15 +77,45 @@ namespace AI_BehaviorTree_AIImplementation
             return actionList;
         }
 
+        private void InitializeBehaviorTree()
+        {
+            List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
+
+            PlayerInformations target = null;
+            foreach (PlayerInformations playerInfo in playerInfos)
+            {
+                if (!playerInfo.IsActive)
+                    continue;
+
+                if (playerInfo.PlayerId == AIId)
+                    continue;
+
+                target = playerInfo;
+                break;
+            }
+
+            ChaseNode chaseNode = new ChaseNode(target);
+            chaseNode.AssignData(ref myBehaviorTree.data);
+            IsInRangeNode chasingRangeNode = new IsInRangeNode(500f, target);
+            chasingRangeNode.AssignData(ref myBehaviorTree.data);
+
+            Sequence chaseSequence = new Sequence(new List<Node>() { chasingRangeNode, chaseNode });
+            Selector topSelector = new Selector(new List<Node>() { chaseSequence });
+
+            myBehaviorTree.start = topSelector;
+        }
+
+
         private void UpdateBlackboard()
         {
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
             PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
-            myBehaviorTree.data.Blackboard["myPlayerPosition"] = myPlayerInfo.Transform.Position;
-            myBehaviorTree.data.Blackboard["myPlayerId"] = myPlayerInfo.PlayerId;
-            myBehaviorTree.data.Blackboard["targetPosition"] = null;
-            myBehaviorTree.data.Blackboard["targetIsEnemy"] = false;
-            myBehaviorTree.data.Blackboard["enemyProximityLimit"] = 10;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.myPlayerPosition] = myPlayerInfo.Transform.Position;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.myPlayerId] = myPlayerInfo.PlayerId;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.targetPosition] = null;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.targetIsEnemy] = false;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.enemyProximityLimit] = 10;
+            myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList] = new List<AIAction>();
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)

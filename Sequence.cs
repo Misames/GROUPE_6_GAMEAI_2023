@@ -8,13 +8,13 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Sequence(List<Node> children) : base(children) { }
 
-        public override State Evaluate()
+        public override State Evaluate(Data data)
         {
             bool anyChildIsRunning = false;
 
             foreach (Node node in children)
             {
-                switch (node.Evaluate())
+                switch (node.Evaluate(data))
                 {
                     case State.FAILURE:
                         state = State.FAILURE;

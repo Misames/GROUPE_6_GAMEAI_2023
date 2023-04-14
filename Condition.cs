@@ -22,11 +22,11 @@ namespace AI_BehaviorTree_AIImplementation
             PlayerInformations target = null;
             foreach (PlayerInformations playerInfo in playerInfos) { }
             // test close to target using blackboard
-            if ((bool)data.Blackboard["targetIsEnemy"] == true) { }
+            if ((bool)data.Blackboard[(int)BlackboardEnum.targetIsEnemy] == true) { }
             return State.SUCCESS;
         }
 
-        public override State Evaluate()
+        public override State Evaluate(Data data)
         {
             state = EvaluateCondition();
 
@@ -34,7 +34,7 @@ namespace AI_BehaviorTree_AIImplementation
             {
                 foreach (Node child in children)
                 {
-                    switch (child.Evaluate())
+                    switch (child.Evaluate(data))
                     {
                         case State.FAILURE:
                             state = State.FAILURE;

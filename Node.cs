@@ -10,9 +10,19 @@ namespace AI_BehaviorTree_AIImplementation
         SUCCESS,
     }
 
+    public enum BlackboardEnum
+    {
+        myPlayerPosition,
+        myPlayerId,
+        targetPosition,
+        targetIsEnemy,
+        enemyProximityLimit,
+        actionList
+    }
+
     public struct Data
     {
-        public Dictionary<string, object> Blackboard;
+        public List<object> Blackboard;
         public GameWorldUtils GameWorld;
     }
 
@@ -72,6 +82,6 @@ namespace AI_BehaviorTree_AIImplementation
         /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
         /// Par défaut retourne une FAILURE
         /// </summary>
-        public virtual State Evaluate() => State.FAILURE;
+        public virtual State Evaluate(Data data) => State.FAILURE;
     }
 }

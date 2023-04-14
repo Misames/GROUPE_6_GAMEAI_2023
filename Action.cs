@@ -1,4 +1,6 @@
-﻿namespace AI_BehaviorTree_AIImplementation
+﻿using System.Collections.Generic;
+
+namespace AI_BehaviorTree_AIImplementation
 {
     public class Action : Node
     {
@@ -17,7 +19,7 @@
             return State.SUCCESS;
         }
 
-        public override State Evaluate()
+        public override State Evaluate(Data data)
         {
             state = DoAction();
 
@@ -25,7 +27,7 @@
             {
                 foreach (Node child in children)
                 {
-                    switch (child.Evaluate())
+                    switch (child.Evaluate(data))
                     {
                         case State.FAILURE:
                             state = State.FAILURE;

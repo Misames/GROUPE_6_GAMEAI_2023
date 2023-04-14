@@ -8,11 +8,11 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Selector(List<Node> children) : base(children) { }
 
-        public override State Evaluate()
+        public override State Evaluate(Data data)
         {
             foreach (Node node in children)
             {
-                switch (node.Evaluate())
+                switch (node.Evaluate(data))
                 {
                     case State.FAILURE:
                         continue;
