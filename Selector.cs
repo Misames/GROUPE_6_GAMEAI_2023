@@ -4,15 +4,9 @@ namespace AI_BehaviorTree_AIImplementation
 {
     public class Selector : Node
     {
-        public Selector() : base()
-        {
-            nodeType = NodeType.SELECTOR;
-        }
+        public Selector() : base() { }
 
-        public Selector(List<Node> children) : base(children)
-        {
-            nodeType = NodeType.SELECTOR;
-        }
+        public Selector(List<Node> children) : base(children) { }
 
         public override State Evaluate()
         {

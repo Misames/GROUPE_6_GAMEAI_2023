@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AI_BehaviorTree_AIGameUtility;
-using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine;
 using System;
 
 namespace AI_BehaviorTree_AIImplementation
@@ -23,24 +23,12 @@ namespace AI_BehaviorTree_AIImplementation
 
         // Ne pas utiliser cette fonction, elle n'est utile que pour le jeu qui vous Set votre Id, si vous voulez votre Id utilisez AIId
         public void SetAIId(int parAIId) {
-            if (debug_mode == 2)
-            {
-                UnityEngine.Debug.LogError("SetAIId "+ parAIId);
-            }
             AIId = parAIId;
             InitializeBehaviorTree();
-
         }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() {
-            if (debug_mode == 2)
-            {
-                UnityEngine.Debug.LogError("GetName " + "Michel");
-            }
-
-            return "MichelAI"; 
-        }
+        public string GetName() { return "MichelAI"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
         {
@@ -48,8 +36,7 @@ namespace AI_BehaviorTree_AIImplementation
             UpdateBlackboard();
         }
 
-        //Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
-
+        // Fin du bloc de fonction nécessaire (Attention ComputeAIDecision en fait aussi partit)
 
         public List<AIAction> ComputeAIDecision()
         {
@@ -63,46 +50,7 @@ namespace AI_BehaviorTree_AIImplementation
             List<AIAction> actionList = new List<AIAction>();
 
             actionList = myBehaviorTree.Compute();
-            /*
-            List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
-
-            PlayerInformations target = null;
-            foreach (PlayerInformations playerInfo in playerInfos)
-            {
-                if (!playerInfo.IsActive)
-                    continue;
-
-                if (playerInfo.PlayerId == AIId)
-                    continue;
-
-                target = playerInfo;
-                break;
-            }
-
-            if (target == null)
-                return actionList;
-
-            PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
-            if (myPlayerInfo == null)
-                return actionList;
-
-            if (Vector3.Distance(myPlayerInfo.Transform.Position, target.Transform.Position) < BestDistanceToFire)
-            {
-                AIActionStopMovement actionStop = new AIActionStopMovement();
-                actionList.Add(actionStop);
-            }
-            else
-            {
-                AIActionMoveToDestination actionMove = new AIActionMoveToDestination();
-                actionMove.Position = target.Transform.Position;
-                actionList.Add(actionMove);
-            }
-
-            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
-            actionLookAt.Position = target.Transform.Position;
-            actionList.Add(actionLookAt);
-            actionList.Add(new AIActionFire());
-            */
+            
             if (debug_mode == 1)
             {
                 UnityEngine.Debug.LogError("debug_ComputeTime: " + DateTime.Now.Subtract(timer).TotalMilliseconds);
@@ -118,9 +66,6 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetPosition, null);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetIsEnemy, false);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.enemyProximityLimit, 10);
-
-            // Creation statique d'un Behaviour tree
-            // en 2 étapes : 1 ajouter les nodes 2 les liers
 
             // creation des nodes
             Selector selectorStart = myBehaviorTree.AddSelector();

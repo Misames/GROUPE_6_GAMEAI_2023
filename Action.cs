@@ -10,10 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del DoAction;
 
-        public Action()
-        {
-            nodeType = NodeType.ACTION;
-        }
+        public Action() { }
 
         public void AssignAction(Del actionFunction)
         {
@@ -88,7 +85,6 @@ namespace AI_BehaviorTree_AIImplementation
         public override State Evaluate()
         {
             state = DoAction();
-
             if (state == State.RUNNING)
             {
                 foreach (Node child in children)
@@ -107,7 +103,6 @@ namespace AI_BehaviorTree_AIImplementation
                     }
                 }
             }
-
             return state;
         }
     }

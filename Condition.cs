@@ -10,10 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del EvaluateCondition;
 
-        public Condition()
-        {
-            nodeType = NodeType.CONDITION;
-        }
+        public Condition() { }
 
         public void AssignCondition(Del conditionFunction)
         {
@@ -63,7 +60,6 @@ namespace AI_BehaviorTree_AIImplementation
             //UnityEngine.Debug.LogError("condition");
 
             state = EvaluateCondition();
-
             if (state == State.SUCCESS)
             {
                 foreach (Node child in children)
@@ -79,10 +75,11 @@ namespace AI_BehaviorTree_AIImplementation
                         case State.RUNNING:
                             state = State.RUNNING;
                             return State.RUNNING;
+                        default:
+                            continue;
                     }
                 }
             }
-
             return state;
         }
     }

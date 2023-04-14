@@ -125,6 +125,7 @@
     <Compile Include="AIDecisionMaker.cs" />
     <Compile Include="BehaviourTree.cs" />
     <Compile Include="Condition.cs" />
+    <Compile Include="Decorator.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selector.cs" />
