@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AI_BehaviorTree_AIGameUtility">
-      <HintPath>..\RedLockGame\RedLock\Red Lock_Data\Managed\AI_BehaviorTree_AIGameUtility.dll</HintPath>
+      <HintPath>..\RedLock\Red Lock_Data\Managed\AI_BehaviorTree_AIGameUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">

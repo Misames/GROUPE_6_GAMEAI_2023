@@ -85,6 +85,18 @@ namespace AI_BehaviorTree_AIImplementation
             return State.RUNNING;
         }
 
+        public State ActionDogeBullet()
+        {
+            Data data = BehaviourTree.Instance().data;
+            if (data.Blackboard[BlackboardVariable.bulletIncoming] == null)
+                return State.FAILURE;
+            AIActionDash newAction = new AIActionDash();
+            BehaviourTree.Instance().computeAction.Add(newAction);
+            return State.SUCCESS;
+
+
+        }
+
         public override State Evaluate()
         {
             state = DoAction();

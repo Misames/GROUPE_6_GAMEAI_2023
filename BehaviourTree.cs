@@ -15,7 +15,9 @@ namespace AI_BehaviorTree_AIImplementation
         myPlayerId,
         targetPosition,
         targetIsEnemy,
-        enemyProximityLimit
+        enemyProximityLimit,
+        bulletIncoming
+        
     }
     class BehaviourTree
     {

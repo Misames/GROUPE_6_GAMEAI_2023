@@ -33,14 +33,7 @@ namespace AI_BehaviorTree_AIImplementation
         }
 
         // Vous pouvez modifier le contenu de cette fonction pour modifier votre nom en jeu
-        public string GetName() {
-            if (debug_mode == 2)
-            {
-                UnityEngine.Debug.LogError("GetName " + "Michel");
-            }
-
-            return "MichelAI"; 
-        }
+        public string GetName() { return "MichelAI"; }
 
         public void SetAIGameWorldUtils(GameWorldUtils parGameWorldUtils)
         {
@@ -129,12 +122,15 @@ namespace AI_BehaviorTree_AIImplementation
             Action actionFindTarget = myBehaviorTree.AddAction();
             Action actionShoot = myBehaviorTree.AddAction();
             Action actionMoveToTarget = myBehaviorTree.AddAction();
+            Action actionDogeBullet= myBehaviorTree.AddAction();
 
 
             //conditionEnemyInSight.AssignCondition(conditionEnemyInSight.EnemyInSight);
             actionFindTarget.AssignAction(actionFindTarget.ActionFindTarget);
             actionShoot.AssignAction(actionShoot.ActionShoot);
             actionMoveToTarget.AssignAction(actionMoveToTarget.ActionMoveToTarget);
+            actionDogeBullet.AssignAction(actionDogeBullet.ActionDogeBullet);
+
 
             sequenceCombat.Attach(actionFindTarget);
             sequenceCombat.Attach(actionShoot);
