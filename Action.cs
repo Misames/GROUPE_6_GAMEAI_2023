@@ -90,11 +90,27 @@ namespace AI_BehaviorTree_AIImplementation
             UnityEngine.Debug.LogError("DogeBullet");
             Data data = BehaviourTree.Instance().data;
             if (data.Blackboard[BlackboardVariable.bulletIncoming] == null)
+            {
+                Debug.LogError("bulletIncoming is null");
                 return State.FAILURE;
-            AIActionDash newAction = new AIActionDash();
-            BehaviourTree.Instance().computeAction.Add(newAction);
+            }
+            AIActionDash actionDash = new AIActionDash();
+            //dash to the left of 
+            if (Time.frameCount % 2 == 0)
+            {
+                actionDash.Direction = new Vector3(1, 0, 1);
+            }
+            else
+            {
+                actionDash.Direction = new Vector3(-1, 0, -1);
+            }
+            Vector3 dashDirection = actionDash.Direction;
+            dashDirection.Normalize();
+            actionDash.Direction = dashDirection;
+            BehaviourTree.Instance().computeAction.Add(actionDash);
             return State.SUCCESS;
-
+            
+            
         }
 
         public override State Evaluate()

@@ -74,6 +74,7 @@ namespace AI_BehaviorTree_AIImplementation
                     foreach (RaycastHit hit in hits)
                     {
                         //UnityEngine.Debug.LogError(hit.collider.gameObject.name);
+                        
                     }
                 }
             }

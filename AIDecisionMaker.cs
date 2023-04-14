@@ -63,6 +63,7 @@ namespace AI_BehaviorTree_AIImplementation
             List<AIAction> actionList = new List<AIAction>();
 
             actionList = myBehaviorTree.Compute();
+
             /*
             List<PlayerInformations> playerInfos = AIGameWorldUtils.GetPlayerInfosList();
 
@@ -103,6 +104,9 @@ namespace AI_BehaviorTree_AIImplementation
             actionList.Add(actionLookAt);
             actionList.Add(new AIActionFire());
             */
+          
+
+
             if (debug_mode == 1)
             {
                 UnityEngine.Debug.LogError("debug_ComputeTime: " + DateTime.Now.Subtract(timer).TotalMilliseconds);
@@ -130,21 +134,25 @@ namespace AI_BehaviorTree_AIImplementation
             Action actionFindTarget = myBehaviorTree.AddAction();
             Action actionShoot = myBehaviorTree.AddAction();
             Action actionMoveToTarget = myBehaviorTree.AddAction();
-            Condition conditionBulletIncoming= myBehaviorTree.AddCondition();
+       
+            
             Action actionDogeBullet = myBehaviorTree.AddAction();
 
-            conditionBulletIncoming.AssignCondition(conditionBulletIncoming.BulletIncoming);
+           
+            actionDogeBullet.AssignAction(actionDogeBullet.ActionDogeBullet);
             //conditionEnemyInSight.AssignCondition(conditionEnemyInSight.EnemyInSight);
             actionFindTarget.AssignAction(actionFindTarget.ActionFindTarget);
             actionShoot.AssignAction(actionShoot.ActionShoot);
             actionMoveToTarget.AssignAction(actionMoveToTarget.ActionMoveToTarget);
-            actionDogeBullet.AssignAction(actionDogeBullet.ActionDogeBullet);
+            
 
 
-            sequenceCombat.Attach(actionDogeBullet);
+            
             sequenceCombat.Attach(actionFindTarget);
             sequenceCombat.Attach(actionShoot);
             sequenceCombat.Attach(actionMoveToTarget);
+            sequenceCombat.Attach(actionDogeBullet);
+            
             
 
             //selectorStart.Attach(conditionEnemyInSight);
