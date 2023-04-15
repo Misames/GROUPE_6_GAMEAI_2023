@@ -5,6 +5,7 @@ namespace AI_BehaviorTree_AIImplementation
     public enum State
     {
         FAILURE,
+        NOTEXECUTED,
         RUNNING,
         SUCCESS,
     }
@@ -38,30 +39,30 @@ namespace AI_BehaviorTree_AIImplementation
         {
             if (decorator.type == DecoratorType.FORCE_FAILURE)
             {
-                privateEvaluate();
+                PrivateEvaluate();
                 state = State.FAILURE;
                 return state;
             }
             else if (decorator.type == DecoratorType.FORCE_SUCCESS)
             {
-                privateEvaluate();
+                PrivateEvaluate();
                 state = State.SUCCESS;
                 return state;
             }
             else if (decorator.type == DecoratorType.INVERTER)
             {
-                state = privateEvaluate() == State.SUCCESS ? State.FAILURE : State.SUCCESS;
+                state = PrivateEvaluate() == State.SUCCESS ? State.FAILURE : State.SUCCESS;
                 return state;
             }
             else if (decorator.type == DecoratorType.RETRY)
             {
-                state = privateEvaluate();
+                state = PrivateEvaluate();
                 uint i = 0;
                 if (state == State.FAILURE)
                 {
                     while (i < decorator.retry && state != State.SUCCESS)
                     {
-                        state = privateEvaluate();
+                        state = PrivateEvaluate();
                         i++;
                     }
                 }
@@ -70,11 +71,11 @@ namespace AI_BehaviorTree_AIImplementation
             else if (decorator.type == DecoratorType.REPEAT)
             {
                 for (int i = 0; i < decorator.repetition; i++)
-                    state = privateEvaluate();
+                    state = PrivateEvaluate();
                 return state;
             }
 
-            state = privateEvaluate();
+            state = PrivateEvaluate();
             return state;
         }
 
@@ -82,7 +83,7 @@ namespace AI_BehaviorTree_AIImplementation
         /// Permet de tester l'état du Node <br />
         /// Ca nous sera utile au moment de l'éxecution des Nodes <br />
         /// </summary>
-        public virtual State privateEvaluate()
+        public virtual State PrivateEvaluate()
         {
             foreach (Node child in children)
             {

@@ -13,7 +13,7 @@
             EvaluateCondition = conditionFunction;
         }
 
-        public override State privateEvaluate()
+        public override State PrivateEvaluate()
         {
             state = EvaluateCondition();
             if (state == State.SUCCESS)

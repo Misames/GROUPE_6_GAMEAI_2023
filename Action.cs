@@ -25,8 +25,7 @@ namespace AI_BehaviorTree_AIImplementation
             if (target == null)
                 return State.FAILURE;
 
-            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
-            actionLookAt.Position = target;
+            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition(target);
             BehaviourTree.Instance().computeAction.Add(actionLookAt);
             BehaviourTree.Instance().computeAction.Add(new AIActionFire());
 
@@ -79,7 +78,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.RUNNING;
         }
 
-        public override State privateEvaluate()
+        public override State PrivateEvaluate()
         {
             state = DoAction();
             if (state == State.RUNNING)

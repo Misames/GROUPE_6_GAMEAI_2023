@@ -21,11 +21,12 @@ namespace AI_BehaviorTree_AIImplementation
 
     class BehaviourTree
     {
+        public static BehaviourTree Instance() { Assert.IsNotNull(instance); return instance; }
+        private static BehaviourTree instance;
+
         public Node start;
         public Data data;
         public List<AIAction> computeAction;
-        public static BehaviourTree Instance() { Assert.IsNotNull(instance); return instance; }
-        private static BehaviourTree instance;
 
         public BehaviourTree()
         {
@@ -42,11 +43,6 @@ namespace AI_BehaviorTree_AIImplementation
             computeAction.Clear();
             start.Evaluate();
             return computeAction;
-        }
-
-        public void UpdateGameWorldData(GameWorldUtils currentGameWorld)
-        {
-            data.GameWorld = currentGameWorld;
         }
     }
 }
