@@ -47,20 +47,25 @@ namespace AI_BehaviorTree_AIImplementation
 
             actionList = (List<AIAction>)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList];
 
+            AIActionLookAtPosition actionLookAt = new AIActionLookAtPosition();
+            actionLookAt.Position = ((PlayerInformations)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.target]).Transform.Position;
+            ((List<AIAction>)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList]).Add(actionLookAt);
+            ((List<AIAction>)myBehaviorTree.data.Blackboard[(int)BlackboardEnum.actionList]).Add(new AIActionFire());
+
             return actionList;
         }
 
         private void InitializeBehaviorTree()
         {
 
-            ChaseBonusNode chaseBonusNode = new ChaseBonusNode();
+            //ChaseBonusNode chaseBonusNode = new ChaseBonusNode();
             SelectTargetNode selectTargetNode = new SelectTargetNode();
             ChaseNode chaseNode = new ChaseNode();
             ProjectileInPlayerDirectionNode projectileInPlayerDirectionNode = new ProjectileInPlayerDirectionNode();
             ShootNode shootNode = new ShootNode();
 
             Sequence chaseSequence = new Sequence(new List<Node>() { selectTargetNode, chaseNode });
-            Selector topSelector = new Selector(new List<Node>() { projectileInPlayerDirectionNode, chaseBonusNode, chaseSequence, shootNode });
+            Selector topSelector = new Selector(new List<Node>() { projectileInPlayerDirectionNode, chaseSequence });
 
             myBehaviorTree.start = topSelector;
         }
