@@ -87,11 +87,11 @@ namespace AI_BehaviorTree_AIImplementation
 
         public State ActionDogeBullet()
         {
-            UnityEngine.Debug.LogError("DogeBullet");
+           
             Data data = BehaviourTree.Instance().data;
             if (data.Blackboard[BlackboardVariable.bulletIncoming] == null)
             {
-                Debug.LogError("bulletIncoming is null");
+                
                 return State.FAILURE;
             }
             AIActionDash actionDash = new AIActionDash();
