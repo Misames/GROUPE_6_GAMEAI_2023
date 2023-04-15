@@ -8,7 +8,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Sequence(List<Node> children) : base(children) { }
 
-        public override State PrivateEvaluate()
+        public override State Evaluate()
         {
             foreach (Node child in children)
             {

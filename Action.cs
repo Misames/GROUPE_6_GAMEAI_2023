@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AI_BehaviorTree_AIGameUtility;
+﻿using AI_BehaviorTree_AIGameUtility;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI_BehaviorTree_AIImplementation
@@ -78,7 +78,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.RUNNING;
         }
 
-        public override State PrivateEvaluate()
+        public override State Evaluate()
         {
             state = DoAction();
             if (state == State.RUNNING)
