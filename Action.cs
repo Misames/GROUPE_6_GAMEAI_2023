@@ -10,7 +10,7 @@ namespace AI_BehaviorTree_AIImplementation
 
         public Del DoAction;
 
-        public Action() : base(){ }
+        public Action() : base() { }
 
         public void AssignAction(Del actionFunction)
         {
@@ -20,7 +20,7 @@ namespace AI_BehaviorTree_AIImplementation
         public State ActionShoot()
         {
             Data data = BehaviourTree.Instance().data;
-            Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
+            Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.enemyTargetPosition];
 
             if (target == null)
                 return State.FAILURE;
@@ -33,7 +33,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.SUCCESS;
         }
 
-        public State ActionFindTarget()
+        public State ActionFindShootTarget()
         {
             Data data = BehaviourTree.Instance().data;
             List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
@@ -58,20 +58,94 @@ namespace AI_BehaviorTree_AIImplementation
             if (target == null)
                 return State.FAILURE;
 
-            data.Blackboard[BlackboardVariable.targetPosition] = target.Transform.Position;
+            data.Blackboard[BlackboardVariable.enemyTargetPosition] = target.Transform.Position;
             return State.SUCCESS;
         }
 
-        public State ActionMoveToTarget()
+        public State ActionFindMoveBonus()
         {
             Data data = BehaviourTree.Instance().data;
+            List<BonusInformations> bonusInfos = data.GameWorld.GetBonusInfosList();
+            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
 
-            Vector3 target = (Vector3)data.Blackboard[BlackboardVariable.targetPosition];
+            BonusInformations target = null;
+
+            float minDistance = 100000;
+
+            foreach (BonusInformations bonusInfo in bonusInfos)
+            {
+
+                float myDistance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], bonusInfo.Position);
+
+                bool closest = true;
+                foreach (PlayerInformations playerInfo in playerInfos)
+                {
+                    if (playerInfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
+                    {
+                        float othersDistance = Vector3.Distance(bonusInfo.Position, playerInfo.Transform.Position);
+                        if (othersDistance < myDistance)
+                        {
+                            closest = false;
+                            break;
+                        }
+                    }
+                }
+                if (closest)
+                {
+                    target = bonusInfo;
+                    break;
+                }
+
+                if (myDistance < minDistance)
+                {
+                    minDistance = myDistance;
+                    target = bonusInfo;
+                }
+
+            }
+
             if (target == null)
                 return State.FAILURE;
 
+            data.Blackboard[BlackboardVariable.bonusTargetPosition] = target.Position;
+            return State.SUCCESS;
+        }
+
+        public State ActionMoveDashToBonus()
+        {
+            Data data = BehaviourTree.Instance().data;
+
+            if (data.Blackboard[BlackboardVariable.bonusTargetPosition] != null)
+            {
+                Vector3 direction = (Vector3)data.Blackboard[BlackboardVariable.bonusTargetPosition] - (Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition];
+                AIActionDash newAction = new AIActionDash(direction);
+                BehaviourTree.Instance().computeAction.Add(newAction);
+                return State.SUCCESS;
+
+            }
+            return State.FAILURE;
+        }
+
+
+            public State ActionMoveToTarget()
+        {
+            Data data = BehaviourTree.Instance().data;
+
+            Vector3 target;
+
+            Vector3 bonus = (Vector3)data.Blackboard[BlackboardVariable.bonusTargetPosition];
+            Vector3 enemy = (Vector3)data.Blackboard[BlackboardVariable.enemyTargetPosition];
+
+            if (bonus == null && enemy == null)
+                return State.FAILURE;
+
+            UnityEngine.Debug.LogError("bonus:"+ bonus + ", enemy:" + enemy);
+            target = bonus;
+            if ((bool) data.Blackboard[BlackboardVariable.bonusExist]==false)
+                target = enemy;
+
             float distance = Vector3.Distance((Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition], target);
-            if (distance < 1)
+            if (distance < 0.5)
                 return State.SUCCESS;
 
             AIActionMoveToDestination newAction = new AIActionMoveToDestination(target);

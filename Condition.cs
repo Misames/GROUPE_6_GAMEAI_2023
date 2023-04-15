@@ -17,36 +17,18 @@ namespace AI_BehaviorTree_AIImplementation
             EvaluateCondition = conditionFunction;
         }
 
-        public State CloseToEnemyTarget()
+        public State BonusAvailable()
         {
             Data data = BehaviourTree.Instance().data;
-            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
-            PlayerInformations target = null;
-            foreach (PlayerInformations playerInfo in playerInfos) { }
-            // test close to target using blackboard
-            if ((bool)data.Blackboard[BlackboardVariable.targetIsEnemy] == true) { }
-            return State.SUCCESS;
-        }
 
-        public State EnemyInSight()
-        {
-            Data data = BehaviourTree.Instance().data;
-            List<PlayerInformations> playerInfos = data.GameWorld.GetPlayerInfosList();
-            Vector3 myPlayerPos = (Vector3)data.Blackboard[BlackboardVariable.myPlayerPosition];
-            PlayerInformations target = null;
-            foreach (PlayerInformations playerInfo in playerInfos)
+            List<BonusInformations> bonusInfos = data.GameWorld.GetBonusInfosList();
+
+            if (bonusInfos.Count != 0)
             {
-                if (playerInfo.PlayerId != (int)data.Blackboard[BlackboardVariable.myPlayerId])
-                {
-                    RaycastHit[] hits = Physics.RaycastAll(myPlayerPos, playerInfo.Transform.Position, 100f);
-                    foreach (RaycastHit hit in hits)
-                    {
-                        //UnityEngine.Debug.LogError(hit.collider.gameObject.name);
-                    }
-
-                }
+                data.Blackboard[BlackboardVariable.bonusExist] = true;
+                return State.SUCCESS;
             }
-            return State.SUCCESS;
+            return State.FAILURE;
         }
 
         public override State privateEvaluate()

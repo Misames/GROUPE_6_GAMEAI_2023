@@ -45,26 +45,42 @@ namespace AI_BehaviorTree_AIImplementation
         {
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.myPlayerPosition, null);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.myPlayerId, null);
-            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetPosition, null);
-            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.targetIsEnemy, false);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.bonusTargetPosition, null);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.enemyTargetPosition, null);
             myBehaviorTree.data.Blackboard.Add(BlackboardVariable.enemyProximityLimit, 10);
+            myBehaviorTree.data.Blackboard.Add(BlackboardVariable.bonusExist, false);
 
             // creation des nodes
             Selector selectorStart = new Selector();
             Sequence sequenceCombat = new Sequence();
-            Action actionFindTarget = new Action();
+
+            Condition conditionBonusAvailable = new Condition();
+
+            Action actionFindMoveBonus = new Action();
+            Action actionFindShootTarget = new Action();
             Action actionShoot = new Action();
             Action actionMoveToTarget = new Action();
+            Action actionDashBonus = new Action();
 
-            actionFindTarget.AssignAction(actionFindTarget.ActionFindTarget);
+            conditionBonusAvailable.AssignCondition(conditionBonusAvailable.BonusAvailable);
+
+            actionFindMoveBonus.AssignAction(actionFindMoveBonus.ActionFindMoveBonus);
+            actionFindShootTarget.AssignAction(actionFindShootTarget.ActionFindShootTarget);
             actionShoot.AssignAction(actionShoot.ActionShoot);
             actionMoveToTarget.AssignAction(actionMoveToTarget.ActionMoveToTarget);
+            actionDashBonus.AssignAction(actionDashBonus.ActionMoveDashToBonus);
 
-            sequenceCombat.Attach(actionFindTarget);
+            conditionBonusAvailable.Attach(actionFindMoveBonus);
+            conditionBonusAvailable.Attach(actionDashBonus);
+            conditionBonusAvailable.decorator.type = DecoratorType.FORCE_FAILURE;
+
+            sequenceCombat.Attach(actionFindShootTarget);
             sequenceCombat.Attach(actionShoot);
             sequenceCombat.Attach(actionMoveToTarget);
 
+            selectorStart.Attach(conditionBonusAvailable);
             selectorStart.Attach(sequenceCombat);
+
             myBehaviorTree.start.Attach(selectorStart);
         }
 
@@ -74,9 +90,8 @@ namespace AI_BehaviorTree_AIImplementation
             PlayerInformations myPlayerInfo = GetPlayerInfos(AIId, playerInfos);
             myBehaviorTree.data.Blackboard[BlackboardVariable.myPlayerPosition] = myPlayerInfo.Transform.Position;
             myBehaviorTree.data.Blackboard[BlackboardVariable.myPlayerId] = myPlayerInfo.PlayerId;
-            myBehaviorTree.data.Blackboard[BlackboardVariable.targetPosition] = null;
-            myBehaviorTree.data.Blackboard[BlackboardVariable.targetIsEnemy] = false;
-            myBehaviorTree.data.Blackboard[BlackboardVariable.enemyProximityLimit] = 10;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.bonusTargetPosition] = null;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.enemyTargetPosition] = null;
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)
