@@ -62,6 +62,8 @@ namespace AI_BehaviorTree_AIImplementation
             Action actionMoveToTarget = new Action();
             Action actionDashBonus = new Action();
 
+            Decorator_FORCE_FAILURE forceFailureBonus = new Decorator_FORCE_FAILURE();
+
             conditionBonusAvailable.AssignCondition(conditionBonusAvailable.BonusAvailable);
 
             actionFindMoveBonus.AssignAction(actionFindMoveBonus.ActionFindMoveBonus);
@@ -72,13 +74,15 @@ namespace AI_BehaviorTree_AIImplementation
 
             conditionBonusAvailable.Attach(actionFindMoveBonus);
             conditionBonusAvailable.Attach(actionDashBonus);
-            conditionBonusAvailable.decorator.type = DecoratorType.FORCE_FAILURE;
+
+            forceFailureBonus.Attach(conditionBonusAvailable);
+
 
             sequenceCombat.Attach(actionFindShootTarget);
             sequenceCombat.Attach(actionShoot);
             sequenceCombat.Attach(actionMoveToTarget);
 
-            selectorStart.Attach(conditionBonusAvailable);
+            selectorStart.Attach(forceFailureBonus);
             selectorStart.Attach(sequenceCombat);
 
             myBehaviorTree.start.Attach(selectorStart);
@@ -92,6 +96,9 @@ namespace AI_BehaviorTree_AIImplementation
             myBehaviorTree.data.Blackboard[BlackboardVariable.myPlayerId] = myPlayerInfo.PlayerId;
             myBehaviorTree.data.Blackboard[BlackboardVariable.bonusTargetPosition] = null;
             myBehaviorTree.data.Blackboard[BlackboardVariable.enemyTargetPosition] = null;
+            myBehaviorTree.data.Blackboard[BlackboardVariable.bonusExist] = false;
+
+
         }
 
         public PlayerInformations GetPlayerInfos(int parPlayerId, List<PlayerInformations> parPlayerInfosList)

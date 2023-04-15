@@ -31,7 +31,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.FAILURE;
         }
 
-        public override State privateEvaluate()
+        public override State Evaluate()
         {
             state = EvaluateCondition();
             if (state == State.SUCCESS)

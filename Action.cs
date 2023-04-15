@@ -139,7 +139,7 @@ namespace AI_BehaviorTree_AIImplementation
             if (bonus == null && enemy == null)
                 return State.FAILURE;
 
-            UnityEngine.Debug.LogError("bonus:"+ bonus + ", enemy:" + enemy);
+            //UnityEngine.Debug.LogError("bonus:"+ bonus + ", enemy:" + enemy);
             target = bonus;
             if ((bool) data.Blackboard[BlackboardVariable.bonusExist]==false)
                 target = enemy;
@@ -153,7 +153,7 @@ namespace AI_BehaviorTree_AIImplementation
             return State.RUNNING;
         }
 
-        public override State privateEvaluate()
+        public override State Evaluate()
         {
             state = DoAction();
             if (state == State.RUNNING)
